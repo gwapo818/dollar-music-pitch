@@ -23,6 +23,33 @@ const PitchPreview = ({ data }: PitchPreviewProps) => {
 
   const titleLine = artists ? `${songTitle} – ${artists}` : songTitle;
 
+  // Build the pitch paragraph
+  let pitchContent = "";
+  
+  if (genre) {
+    pitchContent += `A ${genre} track that stands out in the current music landscape. `;
+  }
+
+  if (theme) {
+    pitchContent += `${theme} `;
+  }
+
+  if (lyrics) {
+    pitchContent += `Lyrics like "${lyrics}" capture the essence of the song. `;
+  }
+
+  if (production) {
+    pitchContent += `${production} `;
+  }
+
+  if (background) {
+    pitchContent += `${background} `;
+  }
+
+  if (targetPlaylist) {
+    pitchContent += `Perfect for ${targetPlaylist} playlists.`;
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -33,39 +60,9 @@ const PitchPreview = ({ data }: PitchPreviewProps) => {
         <CardContent className="p-6 space-y-4 text-left">
           <h2 className="text-xl font-bold">{titleLine}</h2>
           
-          {genre && (
+          {pitchContent && (
             <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
-              A {genre} track that stands out in the current music landscape.
-            </p>
-          )}
-
-          {theme && (
-            <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
-              {theme}
-            </p>
-          )}
-
-          {lyrics && (
-            <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
-              Lyrics like "{lyrics}" capture the essence of the song.
-            </p>
-          )}
-
-          {production && (
-            <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
-              {production}
-            </p>
-          )}
-
-          {background && (
-            <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
-              {background}
-            </p>
-          )}
-
-          {targetPlaylist && (
-            <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
-              Perfect for {targetPlaylist} playlists.
+              {pitchContent}
             </p>
           )}
         </CardContent>
