@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { polishPitch } from "@/utils/openai";
+import { useToast } from "@/components/ui/use-toast";
 
 type PitchPreviewProps = {
   data: {
@@ -17,13 +19,15 @@ type PitchPreviewProps = {
 
 const PitchPreview = ({ data }: PitchPreviewProps) => {
   const { songTitle, artists, genre, theme, lyrics, production, background, targetPlaylist } = data;
+  const [polishedPitch, setPolishedPitch] = useState<string>("");
+  const { toast } = useToast();
   
   // Only show preview if there's at least a title
   if (!songTitle) return null;
 
   const titleLine = artists ? `${songTitle} – ${artists}` : songTitle;
 
-  // Build the pitch paragraph
+  // Build the initial pitch paragraph
   let pitchContent = "";
   
   if (genre) {
@@ -50,6 +54,32 @@ const PitchPreview = ({ data }: PitchPreviewProps) => {
     pitchContent += `Perfect for ${targetPlaylist} playlists.`;
   }
 
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
+    const enhancePitch = async () => {
+      if (pitchContent) {
+        try {
+          const enhanced = await polishPitch(pitchContent);
+          setPolishedPitch(enhanced);
+        } catch (error) {
+          toast({
+            title: "Error polishing pitch",
+            description: "Using original pitch instead",
+            variant: "destructive",
+          });
+          setPolishedPitch(pitchContent);
+        }
+      }
+    };
+
+    // Debounce the API call to avoid too many requests
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(enhancePitch, 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, [pitchContent]);
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -60,9 +90,9 @@ const PitchPreview = ({ data }: PitchPreviewProps) => {
         <CardContent className="p-6 space-y-4 text-left">
           <h2 className="text-xl font-bold">{titleLine}</h2>
           
-          {pitchContent && (
+          {(polishedPitch || pitchContent) && (
             <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
-              {pitchContent}
+              {polishedPitch || pitchContent}
             </p>
           )}
         </CardContent>
