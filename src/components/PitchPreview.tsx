@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { polishPitch } from "@/utils/openai";
@@ -19,6 +19,7 @@ type PitchPreviewProps = {
 
 const PitchPreview = ({ data }: PitchPreviewProps) => {
   const [polishedPitch, setPolishedPitch] = useState<string>("");
+  const [isPolishing, setIsPolishing] = useState(false);
   const { toast } = useToast();
   const { songTitle, artists, genre, theme, lyrics, production, background, targetPlaylist } = data;
   
@@ -49,31 +50,35 @@ const PitchPreview = ({ data }: PitchPreviewProps) => {
     pitchContent += `Perfect for ${targetPlaylist} playlists.`;
   }
 
+  const enhancePitch = useCallback(async () => {
+    if (!pitchContent || isPolishing) return;
+    
+    setIsPolishing(true);
+    try {
+      const enhanced = await polishPitch(pitchContent);
+      setPolishedPitch(enhanced);
+    } catch (error) {
+      console.error('Error enhancing pitch:', error);
+      toast({
+        title: "Error polishing pitch",
+        description: "Using original pitch instead",
+        variant: "destructive",
+      });
+      setPolishedPitch(pitchContent);
+    } finally {
+      setIsPolishing(false);
+    }
+  }, [pitchContent, isPolishing, toast]);
+
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-
-    const enhancePitch = async () => {
+    const timeoutId = setTimeout(() => {
       if (pitchContent) {
-        try {
-          const enhanced = await polishPitch(pitchContent);
-          setPolishedPitch(enhanced);
-        } catch (error) {
-          toast({
-            title: "Error polishing pitch",
-            description: "Using original pitch instead",
-            variant: "destructive",
-          });
-          setPolishedPitch(pitchContent);
-        }
+        enhancePitch();
       }
-    };
-
-    // Debounce the API call to avoid too many requests
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(enhancePitch, 1000);
+    }, 1500); // Increased debounce time for better UX
 
     return () => clearTimeout(timeoutId);
-  }, [pitchContent, toast]);
+  }, [pitchContent, enhancePitch]);
 
   // Only render if there's at least a title
   if (!songTitle) return null;

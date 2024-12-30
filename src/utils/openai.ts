@@ -17,7 +17,7 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
     const openai = await getOpenAIClient();
     
     const response = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4o-mini", // Using the available model instead of gpt-4
       messages: [
         {
           role: "system",
@@ -35,6 +35,6 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
     return response.choices[0].message.content || pitchContent;
   } catch (error) {
     console.error('Error polishing pitch:', error);
-    return pitchContent;
+    throw error; // Let the component handle the error
   }
 };
