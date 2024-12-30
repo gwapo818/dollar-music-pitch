@@ -16,7 +16,7 @@ type PitchPreviewProps = {
 };
 
 const PitchPreview = ({ data }: PitchPreviewProps) => {
-  const { songTitle, artists, theme, lyrics, production, background } = data;
+  const { songTitle, artists, genre, theme, lyrics, production, background, targetPlaylist } = data;
   
   // Only show preview if there's at least a title
   if (!songTitle) return null;
@@ -33,6 +33,12 @@ const PitchPreview = ({ data }: PitchPreviewProps) => {
         <CardContent className="p-6 space-y-4 text-left">
           <h2 className="text-xl font-bold">{titleLine}</h2>
           
+          {genre && (
+            <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
+              A {genre} track that stands out in the current music landscape.
+            </p>
+          )}
+
           {theme && (
             <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
               {theme}
@@ -54,6 +60,12 @@ const PitchPreview = ({ data }: PitchPreviewProps) => {
           {background && (
             <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
               {background}
+            </p>
+          )}
+
+          {targetPlaylist && (
+            <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
+              Perfect for {targetPlaylist} playlists.
             </p>
           )}
         </CardContent>
