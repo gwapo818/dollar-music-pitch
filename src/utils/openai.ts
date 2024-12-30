@@ -1,12 +1,21 @@
 import OpenAI from 'openai';
+import { supabase } from '@/integrations/supabase/client';
 
-const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true
-});
+const getOpenAIClient = async () => {
+  const { data: { secret: apiKey } } = await supabase.functions.invoke('get-secret', {
+    body: { name: 'OPENAI_API_KEY' }
+  });
+  
+  return new OpenAI({
+    apiKey,
+    dangerouslyAllowBrowser: true
+  });
+};
 
 export const polishPitch = async (pitchContent: string): Promise<string> => {
   try {
+    const openai = await getOpenAIClient();
+    
     const response = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [
