@@ -26,7 +26,7 @@ const Index = () => {
     targetPlaylist: "",
   });
 
-  const handleFormSubmit = (data: PitchData) => {
+  const handleFormUpdate = (data: PitchData) => {
     setPitchData(data);
   };
 
@@ -47,7 +47,7 @@ const Index = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="space-y-8">
-            <PitchForm onSubmit={handleFormSubmit} />
+            <PitchForm onSubmit={handleFormUpdate} />
           </div>
           <div className="lg:sticky lg:top-8 space-y-8">
             <PitchPreview data={pitchData} />

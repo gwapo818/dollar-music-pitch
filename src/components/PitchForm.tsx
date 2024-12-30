@@ -41,8 +41,16 @@ const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData) => void }) =>
     },
   });
 
+  // Watch all form fields for changes
+  React.useEffect(() => {
+    const subscription = form.watch((value) => {
+      // Pass the current form values to parent component
+      onSubmit(value as PitchFormData);
+    });
+    return () => subscription.unsubscribe();
+  }, [form.watch, onSubmit]);
+
   const handleSubmit = (data: PitchFormData) => {
-    onSubmit(data);
     toast.success("Pitch created successfully!");
   };
 
