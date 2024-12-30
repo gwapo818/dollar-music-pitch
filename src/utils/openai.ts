@@ -34,11 +34,13 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
 
     return response.choices[0].message.content || pitchContent;
   } catch (error: any) {
+    console.error('Error in polishPitch:', error);
+    
     // Check for quota exceeded error
-    if (error?.status === 429) {
+    if (error?.status === 429 || (error?.message && error.message.includes("quota exceeded"))) {
       throw new Error("OpenAI API quota exceeded. Using original pitch content.");
     }
-    console.error('Error polishing pitch:', error);
+    
     throw error;
   }
 };
