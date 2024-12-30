@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 
 type PitchPreviewProps = {
@@ -16,6 +16,13 @@ type PitchPreviewProps = {
 };
 
 const PitchPreview = ({ data }: PitchPreviewProps) => {
+  const { songTitle, artists, theme, lyrics, production, background } = data;
+  
+  // Only show preview if there's at least a title
+  if (!songTitle) return null;
+
+  const titleLine = artists ? `${songTitle} – ${artists}` : songTitle;
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -23,64 +30,31 @@ const PitchPreview = ({ data }: PitchPreviewProps) => {
       transition={{ duration: 0.3 }}
     >
       <Card className="glass-card overflow-hidden">
-        <CardHeader className="border-b border-white/10">
-          <CardTitle className="text-xl font-semibold">Pitch Preview</CardTitle>
-        </CardHeader>
-        <CardContent className="p-6 space-y-4">
-          {data.songTitle && (
-            <div className="space-y-1">
-              <h3 className="text-sm font-medium text-white/60">Song Title</h3>
-              <p className="text-lg font-semibold">{data.songTitle}</p>
-            </div>
+        <CardContent className="p-6 space-y-4 text-left">
+          <h2 className="text-xl font-bold">{titleLine}</h2>
+          
+          {theme && (
+            <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
+              {theme}
+            </p>
           )}
 
-          {data.artists && (
-            <div className="space-y-1">
-              <h3 className="text-sm font-medium text-white/60">Featured Artists</h3>
-              <p>{data.artists}</p>
-            </div>
+          {lyrics && (
+            <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
+              Lyrics like "{lyrics}" capture the essence of the song.
+            </p>
           )}
 
-          {data.genre && (
-            <div className="space-y-1">
-              <h3 className="text-sm font-medium text-white/60">Genre</h3>
-              <p>{data.genre}</p>
-            </div>
+          {production && (
+            <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
+              {production}
+            </p>
           )}
 
-          {data.theme && (
-            <div className="space-y-1">
-              <h3 className="text-sm font-medium text-white/60">Theme/Story</h3>
-              <p className="whitespace-pre-wrap">{data.theme}</p>
-            </div>
-          )}
-
-          {data.lyrics && (
-            <div className="space-y-1">
-              <h3 className="text-sm font-medium text-white/60">Notable Lyrics</h3>
-              <p className="whitespace-pre-wrap">{data.lyrics}</p>
-            </div>
-          )}
-
-          {data.production && (
-            <div className="space-y-1">
-              <h3 className="text-sm font-medium text-white/60">Production Details</h3>
-              <p className="whitespace-pre-wrap">{data.production}</p>
-            </div>
-          )}
-
-          {data.background && (
-            <div className="space-y-1">
-              <h3 className="text-sm font-medium text-white/60">Artist Background</h3>
-              <p className="whitespace-pre-wrap">{data.background}</p>
-            </div>
-          )}
-
-          {data.targetPlaylist && (
-            <div className="space-y-1">
-              <h3 className="text-sm font-medium text-white/60">Target Playlist</h3>
-              <p>{data.targetPlaylist}</p>
-            </div>
+          {background && (
+            <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
+              {background}
+            </p>
           )}
         </CardContent>
       </Card>
