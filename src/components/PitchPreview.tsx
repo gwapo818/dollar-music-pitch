@@ -18,15 +18,10 @@ type PitchPreviewProps = {
 };
 
 const PitchPreview = ({ data }: PitchPreviewProps) => {
-  const { songTitle, artists, genre, theme, lyrics, production, background, targetPlaylist } = data;
   const [polishedPitch, setPolishedPitch] = useState<string>("");
   const { toast } = useToast();
+  const { songTitle, artists, genre, theme, lyrics, production, background, targetPlaylist } = data;
   
-  // Only show preview if there's at least a title
-  if (!songTitle) return null;
-
-  const titleLine = artists ? `${songTitle} – ${artists}` : songTitle;
-
   // Build the initial pitch paragraph
   let pitchContent = "";
   
@@ -78,7 +73,12 @@ const PitchPreview = ({ data }: PitchPreviewProps) => {
     timeoutId = setTimeout(enhancePitch, 1000);
 
     return () => clearTimeout(timeoutId);
-  }, [pitchContent]);
+  }, [pitchContent, toast]);
+
+  // Only render if there's at least a title
+  if (!songTitle) return null;
+
+  const titleLine = artists ? `${songTitle} – ${artists}` : songTitle;
 
   return (
     <motion.div
