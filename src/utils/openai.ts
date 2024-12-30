@@ -17,7 +17,7 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
     const openai = await getOpenAIClient();
     
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini", // Using the available model instead of gpt-4
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
@@ -33,8 +33,12 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
     });
 
     return response.choices[0].message.content || pitchContent;
-  } catch (error) {
+  } catch (error: any) {
+    // Check for quota exceeded error
+    if (error?.status === 429) {
+      throw new Error("OpenAI API quota exceeded. Using original pitch content.");
+    }
     console.error('Error polishing pitch:', error);
-    throw error; // Let the component handle the error
+    throw error;
   }
 };
