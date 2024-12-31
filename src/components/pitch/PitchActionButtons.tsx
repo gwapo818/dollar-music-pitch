@@ -22,37 +22,39 @@ const PitchActionButtons = ({
   return (
     <div className="flex gap-2">
       {hasEnhanced && (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onRegenerate}
-          disabled={isPolishing}
-          className={buttonClasses}
-        >
-          <RefreshCw className={`h-4 w-4 ${isPolishing ? 'animate-spin' : ''}`} />
-          Regenerate
-        </Button>
+        <>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onRegenerate}
+            disabled={isPolishing}
+            className={buttonClasses}
+          >
+            <RefreshCw className={`h-4 w-4 ${isPolishing ? 'animate-spin' : ''}`} />
+            Regenerate
+          </Button>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onCopy}
+            className={buttonClasses}
+          >
+            <Copy className="h-4 w-4" />
+            Copy
+          </Button>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onExport}
+            className={buttonClasses}
+          >
+            <Download className="h-4 w-4" />
+            Export
+          </Button>
+        </>
       )}
-      
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={onCopy}
-        className={buttonClasses}
-      >
-        <Copy className="h-4 w-4" />
-        Copy
-      </Button>
-      
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={onExport}
-        className={buttonClasses}
-      >
-        <Download className="h-4 w-4" />
-        Export
-      </Button>
     </div>
   );
 };
