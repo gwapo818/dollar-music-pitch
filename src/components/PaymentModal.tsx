@@ -17,6 +17,11 @@ interface PayPalCredentials {
   secret_key: string;
 }
 
+interface PayPalCredentialsResponse {
+  client_id: string;
+  secret_key: string;
+}
+
 const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState<PayPalCredentials | null>(null);
@@ -54,9 +59,10 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
         }
 
         console.log("PayPal credentials retrieved successfully");
+        const typedData = data as PayPalCredentialsResponse;
         setCredentials({
-          client_id: data.client_id,
-          secret_key: data.secret_key
+          client_id: typedData.client_id,
+          secret_key: typedData.secret_key
         });
       } catch (error) {
         console.error('Unexpected error:', error);
