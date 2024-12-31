@@ -78,13 +78,13 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
             options={{
               clientId: clientId,
               currency: "USD",
-              intent: "capture",
             }}
           >
             <PayPalButtons
               style={{ layout: "vertical" }}
               createOrder={(data, actions) => {
                 return actions.order.create({
+                  intent: "CAPTURE",
                   purchase_units: [
                     {
                       amount: {
