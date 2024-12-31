@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -70,6 +70,9 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
             <DialogTitle className="text-2xl font-bold text-center">
               Payment System Error
             </DialogTitle>
+            <DialogDescription className="text-white/80 text-center">
+              We encountered an issue with the payment system
+            </DialogDescription>
           </DialogHeader>
           <div className="p-4 text-center">
             <p className="text-red-400">{error}</p>
@@ -93,6 +96,9 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
             <DialogTitle className="text-2xl font-bold text-center">
               Loading Payment System...
             </DialogTitle>
+            <DialogDescription className="text-white/80 text-center">
+              Please wait while we initialize the payment system
+            </DialogDescription>
           </DialogHeader>
           <div className="p-4 flex justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-app-accent"></div>
@@ -109,6 +115,9 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
           <DialogTitle className="text-2xl font-bold text-center">
             Complete Payment
           </DialogTitle>
+          <DialogDescription className="text-white/80 text-center">
+            Make a secure payment to access the pitch creation tool
+          </DialogDescription>
         </DialogHeader>
         <div className="p-4">
           <p className="text-center mb-6 text-white/80">
