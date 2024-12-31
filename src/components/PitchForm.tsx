@@ -57,12 +57,13 @@ const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData, enhance?: boo
   // Handle countdown timer
   useEffect(() => {
     let timer: NodeJS.Timeout;
+    let countdownTimer: NodeJS.Timer;
     
     if (shouldStartCountdown && !countdownStarted) {
       timer = setTimeout(() => {
         setCountdownStarted(true);
         const startTime = Date.now();
-        const countdownTimer = setInterval(() => {
+        countdownTimer = setInterval(() => {
           const elapsed = (Date.now() - startTime) / 1000;
           const progress = Math.min((elapsed / COUNTDOWN_DURATION) * 100, 100);
           
@@ -70,16 +71,15 @@ const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData, enhance?: boo
           
           if (progress >= 100) {
             clearInterval(countdownTimer);
-            handleSubmit(form.getValues())();
+            handleSubmit(form.getValues());
           }
         }, 50);
-
-        return () => clearInterval(countdownTimer);
       }, COUNTDOWN_DELAY * 1000);
     }
 
     return () => {
       clearTimeout(timer);
+      clearInterval(countdownTimer);
       setCountdownProgress(0);
     };
   }, [shouldStartCountdown, countdownStarted]);

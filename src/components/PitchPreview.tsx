@@ -6,6 +6,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { CircuitBoard } from "lucide-react";
 import { jsPDF } from "jspdf";
 import PitchActionButtons from "./pitch/PitchActionButtons";
+import PitchContent from "./pitch/PitchContent";
+import LoadingAnimation from "./pitch/LoadingAnimation";
 
 type PitchPreviewProps = {
   data: {
@@ -20,8 +22,6 @@ type PitchPreviewProps = {
   };
   shouldEnhance: boolean;
 };
-
-const CHAR_LIMIT = 500;
 
 const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
   const [polishedPitch, setPolishedPitch] = useState<string>("");
@@ -168,15 +168,10 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
             <CircuitBoard className="w-6 h-6 text-[#9b87f5]/30" />
           </div>
           
-          {(polishedPitch || pitchContent) && (
-            <motion.p 
-              className="text-white/90 whitespace-pre-wrap leading-relaxed pb-16"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              {polishedPitch || pitchContent}
-            </motion.p>
+          {isPolishing ? (
+            <LoadingAnimation />
+          ) : (
+            <PitchContent content={polishedPitch || pitchContent} />
           )}
           
           <motion.div 
