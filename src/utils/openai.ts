@@ -69,6 +69,13 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
   } catch (error: any) {
     console.error('Error in polishPitch:', error);
     
+    // Check for quota exceeded error specifically
+    if (error?.status === 429 || 
+        (error?.message && error.message.includes("quota exceeded")) ||
+        (error?.error?.type === "insufficient_quota")) {
+      throw new Error("OpenAI API quota exceeded. Using original pitch content.");
+    }
+    
     // Check for authentication errors
     if (error?.status === 401 || (error?.message && error.message.includes("invalid_api_key"))) {
       console.error('Authentication error details:', {
@@ -77,11 +84,6 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
         response: error?.response
       });
       throw new Error("Invalid OpenAI API key. Please check your API key configuration.");
-    }
-    
-    // Check for quota exceeded error
-    if (error?.status === 429 || (error?.message && error.message.includes("quota exceeded"))) {
-      throw new Error("OpenAI API quota exceeded. Using original pitch content.");
     }
     
     // For any other error, throw it to be handled by the component
