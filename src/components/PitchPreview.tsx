@@ -8,6 +8,7 @@ import { jsPDF } from "jspdf";
 import PitchActionButtons from "./pitch/PitchActionButtons";
 import PitchContent from "./pitch/PitchContent";
 import LoadingAnimation from "./pitch/LoadingAnimation";
+import PitchChat from "./pitch/PitchChat";
 
 type PitchPreviewProps = {
   data: {
@@ -188,6 +189,13 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
               hasEnhanced={hasEnhanced}
             />
           </motion.div>
+
+          {hasEnhanced && (
+            <PitchChat
+              currentPitch={polishedPitch || pitchContent}
+              onUpdatePitch={setPolishedPitch}
+            />
+          )}
         </CardContent>
       </Card>
     </motion.div>
