@@ -24,10 +24,10 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        spotify: {
-          dark: "#121212",
-          card: "#282828",
-          accent: "#10B981",
+        app: {
+          dark: "#1A1F2C",
+          card: "#2A2F3C",
+          accent: "#9b87f5",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",

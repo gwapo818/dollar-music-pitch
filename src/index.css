@@ -34,13 +34,13 @@
     @apply border-border;
   }
   body {
-    @apply bg-spotify-dark text-foreground font-sans antialiased;
+    @apply bg-app-dark text-foreground font-sans antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
 .glass-card {
-  @apply bg-spotify-card/90 backdrop-blur-sm border border-white/10 shadow-xl;
+  @apply bg-app-card/90 backdrop-blur-sm border border-white/10 shadow-xl;
 }
 
 .form-input-transition {

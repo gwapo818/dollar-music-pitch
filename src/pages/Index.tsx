@@ -33,7 +33,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-spotify-dark text-white py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-app-dark via-[#232838] to-[#1A1F2C] text-white py-8 px-4 sm:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -41,7 +41,9 @@ const Index = () => {
         className="max-w-7xl mx-auto"
       >
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold tracking-tight">Spotify Playlist Pitch Creator</h1>
+          <h1 className="text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#9b87f5] to-[#D6BCFA]">
+            Music Pitch Creator
+          </h1>
           <p className="mt-4 text-lg text-white/60">
             Create professional pitches for your music
           </p>
