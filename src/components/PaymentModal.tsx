@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import PaymentError from "./payment/PaymentError";
 import PaymentLoading from "./payment/PaymentLoading";
 import PayPalButton from "./payment/PayPalButton";
+import { Json } from "@/integrations/supabase/types";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -54,16 +55,27 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
           return;
         }
 
-        const paypalData = data as PayPalCredentials;
-        if (!paypalData || !paypalData.client_id || !paypalData.secret_key) {
-          console.error('Invalid PayPal credentials returned:', paypalData);
+        // Type guard to check if data is a valid PayPalCredentials object
+        const isValidPayPalCredentials = (data: Json): data is PayPalCredentials => {
+          return (
+            typeof data === 'object' &&
+            data !== null &&
+            'client_id' in data &&
+            'secret_key' in data &&
+            typeof data.client_id === 'string' &&
+            typeof data.secret_key === 'string'
+          );
+        };
+
+        if (!isValidPayPalCredentials(data)) {
+          console.error('Invalid PayPal credentials returned:', data);
           setError("PayPal configuration is invalid or incomplete.");
           toast.error("Payment system configuration is invalid");
           return;
         }
 
         console.log("PayPal credentials retrieved successfully");
-        setCredentials(paypalData);
+        setCredentials(data);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
         console.error('Unexpected error:', errorMessage);
