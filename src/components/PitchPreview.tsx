@@ -69,12 +69,12 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
     pitchContent = pitchContent.substring(0, SPOTIFY_CHAR_LIMIT - 3) + "...";
   }
 
-  const enhancePitch = useCallback(async () => {
+  const enhancePitch = useCallback(async (isRegeneration: boolean = false) => {
     if (!pitchContent || isPolishing) return;
     
     setIsPolishing(true);
     try {
-      const enhanced = await polishPitch(pitchContent);
+      const enhanced = await polishPitch(pitchContent, isRegeneration);
       // Ensure the enhanced pitch also respects the character limit
       const trimmedEnhanced = enhanced.length > SPOTIFY_CHAR_LIMIT 
         ? enhanced.substring(0, SPOTIFY_CHAR_LIMIT - 3) + "..."
@@ -107,7 +107,7 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
   const handleRegenerate = () => {
     setHasEnhanced(false);
     setPolishedPitch("");
-    enhancePitch();
+    enhancePitch(true);
   };
 
   // Reset enhancement state when pitch content changes
@@ -120,7 +120,7 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
   // Only enhance when shouldEnhance is true and hasn't been enhanced yet
   React.useEffect(() => {
     if (shouldEnhance && pitchContent && !hasEnhanced) {
-      enhancePitch();
+      enhancePitch(false);
     }
   }, [shouldEnhance, pitchContent, enhancePitch, hasEnhanced]);
 

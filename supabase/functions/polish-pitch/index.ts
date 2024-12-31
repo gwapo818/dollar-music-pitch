@@ -17,8 +17,8 @@ serve(async (req) => {
   }
 
   try {
-    const { pitch } = await req.json();
-    console.log('Received pitch for polishing:', pitch);
+    const { pitch, isRegeneration } = await req.json();
+    console.log(`Processing ${isRegeneration ? 'regeneration' : 'initial'} pitch:`, pitch);
 
     let attempts = 0;
     const maxAttempts = 3;
@@ -39,14 +39,16 @@ serve(async (req) => {
             messages: [
               {
                 role: 'system',
-                content: 'You are a professional music industry pitch writer. Your task is to polish and enhance music pitch descriptions while maintaining their core message and keeping them concise (max 3 sentences).'
+                content: isRegeneration 
+                  ? 'You are a creative music industry professional. Generate a completely new version of this pitch while maintaining the same key information but with different wording and structure. Keep it concise (max 3 sentences).'
+                  : 'You are a professional music industry pitch writer. Your task is to polish and enhance music pitch descriptions while maintaining their core message and keeping them concise (max 3 sentences).'
               },
               {
                 role: 'user',
-                content: `Polish this music pitch while maintaining its core message: ${pitch}`
+                content: `${isRegeneration ? 'Create a new version of this pitch:' : 'Polish this music pitch while maintaining its core message:'} ${pitch}`
               }
             ],
-            temperature: 0.7,
+            temperature: isRegeneration ? 0.9 : 0.7,
             max_tokens: 200,
           }),
         });

@@ -1,11 +1,14 @@
 import { supabase } from '@/integrations/supabase/client';
 
-export const polishPitch = async (pitchContent: string): Promise<string> => {
+export const polishPitch = async (pitchContent: string, isRegeneration: boolean = false): Promise<string> => {
   try {
-    console.log('Sending pitch for enhancement:', pitchContent);
+    console.log(`Sending pitch for ${isRegeneration ? 'regeneration' : 'enhancement'}:`, pitchContent);
     
     const { data, error } = await supabase.functions.invoke('polish-pitch', {
-      body: { pitch: pitchContent }
+      body: { 
+        pitch: pitchContent,
+        isRegeneration
+      }
     });
 
     if (error) {
