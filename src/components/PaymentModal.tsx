@@ -21,21 +21,27 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
       setIsLoading(true);
       setError(null);
       try {
-        const { data, error } = await supabase.rpc('get_paypal_client_id');
-        if (error) {
-          console.error('Error fetching PayPal client ID:', error);
+        console.log("Fetching PayPal client ID...");
+        const { data, error: rpcError } = await supabase.rpc('get_paypal_client_id');
+        
+        if (rpcError) {
+          console.error('Error fetching PayPal client ID:', rpcError);
           setError("Failed to load payment system");
           toast.error("Failed to load payment system. Please try again later.");
           return;
         }
+
+        console.log("PayPal client ID response:", data);
+        
         if (data) {
           setClientId(data);
         } else {
+          console.error('No PayPal client ID returned');
           setError("PayPal configuration not found");
           toast.error("Payment system configuration is missing");
         }
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Unexpected error:', error);
         setError("Failed to initialize payment system");
         toast.error("Failed to initialize payment system");
       } finally {
