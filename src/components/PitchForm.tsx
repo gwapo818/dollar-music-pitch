@@ -31,17 +31,18 @@ const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData, enhance?: boo
     },
   });
 
-  // Watch all form fields for changes
+  // Watch form changes for real-time preview (without enhancement)
   React.useEffect(() => {
     const subscription = form.watch((value) => {
-      // Pass the current form values to parent component without enhancement
-      onSubmit(value as PitchFormData, false);
+      if (value) {
+        onSubmit(value as PitchFormData, false);
+      }
     });
     return () => subscription.unsubscribe();
   }, [form.watch, onSubmit]);
 
-  const handleSubmit = (data: PitchFormData) => {
-    // Pass the form data with enhancement flag
+  const handleSubmit = async (data: PitchFormData) => {
+    // Only enhance the pitch once when the button is clicked
     onSubmit(data, true);
     toast.success("Pitch created successfully!");
   };
