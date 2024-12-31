@@ -13,6 +13,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import {
   Popover,
@@ -37,10 +38,8 @@ export const GenreSelect = ({ form }: { form: any }) => {
   const [open, setOpen] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState("");
   
-  // Ensure we always have an array, even if the field is undefined
   const selectedGenres = React.useMemo(() => {
-    const value = form.watch("genre");
-    if (!value) return [];
+    const value = form.watch("genre") || "";
     return value.split(",").filter(Boolean);
   }, [form.watch("genre")]);
 
@@ -110,34 +109,36 @@ export const GenreSelect = ({ form }: { form: any }) => {
                     value={searchValue}
                     onValueChange={setSearchValue}
                   />
-                  <CommandEmpty className="p-2">
-                    {searchValue.trim() && (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        className="w-full justify-start gap-2"
-                        onClick={handleAddCustomGenre}
-                      >
-                        <Plus className="w-4 h-4" />
-                        Add "{searchValue}"
-                      </Button>
-                    )}
-                  </CommandEmpty>
-                  <CommandGroup>
-                    {filteredGenres.length > 0 && filteredGenres.map((genre) => (
-                      <CommandItem
-                        key={genre}
-                        value={genre}
-                        onSelect={() => handleGenreSelect(genre)}
-                        className={cn(
-                          "cursor-pointer",
-                          selectedGenres.includes(genre) && "bg-accent"
-                        )}
-                      >
-                        {genre}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
+                  <CommandList>
+                    <CommandEmpty className="p-2">
+                      {searchValue.trim() && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className="w-full justify-start gap-2"
+                          onClick={handleAddCustomGenre}
+                        >
+                          <Plus className="w-4 h-4" />
+                          Add "{searchValue}"
+                        </Button>
+                      )}
+                    </CommandEmpty>
+                    <CommandGroup>
+                      {filteredGenres.map((genre) => (
+                        <CommandItem
+                          key={genre}
+                          value={genre}
+                          onSelect={() => handleGenreSelect(genre)}
+                          className={cn(
+                            "cursor-pointer",
+                            selectedGenres.includes(genre) && "bg-accent"
+                          )}
+                        >
+                          {genre}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
                 </Command>
               </PopoverContent>
             </Popover>
