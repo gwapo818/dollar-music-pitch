@@ -10,6 +10,10 @@ const getOpenAIClient = async () => {
     body: { name: 'OPENAI_ORG_ID' }
   });
   
+  if (!apiKey) {
+    throw new Error("OpenAI API key not found");
+  }
+
   return new OpenAI({
     apiKey,
     organization: orgId, // Will be undefined if not set, which is fine
@@ -37,7 +41,12 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
       max_tokens: 200,
     });
 
-    return response.choices[0].message.content || pitchContent;
+    const enhancedPitch = response.choices[0].message.content;
+    if (!enhancedPitch) {
+      throw new Error("No response from OpenAI");
+    }
+    
+    return enhancedPitch;
   } catch (error: any) {
     console.error('Error in polishPitch:', error);
     
