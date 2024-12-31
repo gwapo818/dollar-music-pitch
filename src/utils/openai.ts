@@ -35,7 +35,7 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
     const openai = await getOpenAIClient();
     
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
