@@ -17,11 +17,6 @@ interface PayPalCredentials {
   secret_key: string;
 }
 
-interface PayPalCredentialsResponse {
-  client_id: string;
-  secret_key: string;
-}
-
 const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState<PayPalCredentials | null>(null);
@@ -41,32 +36,39 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
         
         if (rpcError) {
           console.error('Error fetching PayPal credentials:', rpcError);
-          if (rpcError.message && rpcError.message.includes('not configured')) {
-            setError("PayPal is not properly configured. Please ensure both PAYPAL_CLIENT_ID and PAYPAL_SECRET_KEY are set in Supabase secrets.");
+          // Check if the error is due to missing configuration
+          if (rpcError.message && (
+            rpcError.message.includes('not configured') || 
+            rpcError.message.includes('PayPal credentials not configured')
+          )) {
+            const errorMessage = "PayPal is not properly configured. Please ensure both PAYPAL_CLIENT_ID and PAYPAL_SECRET_KEY are set in Supabase secrets.";
+            console.error(errorMessage);
+            setError(errorMessage);
             toast.error("PayPal configuration is missing. Please contact support.");
           } else {
-            setError(`Failed to load payment system: ${rpcError.message}`);
+            const errorMessage = `Failed to load payment system: ${rpcError.message}`;
+            console.error(errorMessage);
+            setError(errorMessage);
             toast.error("Failed to load payment system. Please try again later.");
           }
           return;
         }
 
-        if (!data) {
-          console.error('No PayPal credentials returned');
-          setError("PayPal configuration not found.");
-          toast.error("Payment system configuration is missing");
+        if (!data || !data.client_id || !data.secret_key) {
+          console.error('Invalid PayPal credentials returned:', data);
+          setError("PayPal configuration is invalid or incomplete.");
+          toast.error("Payment system configuration is invalid");
           return;
         }
 
         console.log("PayPal credentials retrieved successfully");
-        // First cast to unknown, then to our expected type for type safety
-        const typedData = (data as unknown) as PayPalCredentialsResponse;
         setCredentials({
-          client_id: typedData.client_id,
-          secret_key: typedData.secret_key
+          client_id: data.client_id,
+          secret_key: data.secret_key
         });
       } catch (error) {
-        console.error('Unexpected error:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        console.error('Unexpected error:', errorMessage);
         setError("Failed to initialize payment system. Please try again later.");
         toast.error("Failed to initialize payment system");
       } finally {
