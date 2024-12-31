@@ -20,7 +20,7 @@ const PitchActionButtons = ({
   const buttonClasses = "gap-2 bg-[#9b87f5]/10 border-[#9b87f5]/30 hover:bg-[#9b87f5]/20 hover:border-[#9b87f5]/40 text-[#D6BCFA]";
 
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-wrap gap-2 justify-end">
       {hasEnhanced && (
         <>
           <Button
@@ -31,7 +31,7 @@ const PitchActionButtons = ({
             className={buttonClasses}
           >
             <RefreshCw className={`h-4 w-4 ${isPolishing ? 'animate-spin' : ''}`} />
-            Regenerate
+            <span className="whitespace-nowrap">Regenerate</span>
           </Button>
           
           <Button
@@ -41,7 +41,7 @@ const PitchActionButtons = ({
             className={buttonClasses}
           >
             <Copy className="h-4 w-4" />
-            Copy
+            <span className="whitespace-nowrap">Copy</span>
           </Button>
           
           <Button
@@ -51,7 +51,7 @@ const PitchActionButtons = ({
             className={buttonClasses}
           >
             <Download className="h-4 w-4" />
-            Export
+            <span className="whitespace-nowrap">Export</span>
           </Button>
         </>
       )}

@@ -1,14 +1,14 @@
 import React, { useState, useCallback } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { polishPitch } from "@/utils/openai";
 import { useToast } from "@/components/ui/use-toast";
-import { CircuitBoard } from "lucide-react";
 import { jsPDF } from "jspdf";
 import PitchActionButtons from "./pitch/PitchActionButtons";
 import PitchContent from "./pitch/PitchContent";
 import LoadingAnimation from "./pitch/LoadingAnimation";
 import PitchChat from "./pitch/PitchChat";
+import PitchContainer from "./pitch/PitchContainer";
+import PitchHeader from "./pitch/PitchHeader";
 
 type PitchPreviewProps = {
   data: {
@@ -29,42 +29,28 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
   const [isPolishing, setIsPolishing] = useState(false);
   const [hasEnhanced, setHasEnhanced] = useState(false);
   const { toast } = useToast();
-  const { songTitle, artists, genre, theme, lyrics, production, background, targetPlaylist } = data;
   
   // Build the initial pitch paragraph
-  let pitchContent = "";
-  
-  if (songTitle) {
-    pitchContent += `"${songTitle}"`;
-    if (artists) {
-      pitchContent += ` by ${artists}`;
+  const buildInitialPitch = () => {
+    const { songTitle, artists, genre, theme, lyrics, production, background, targetPlaylist } = data;
+    let content = "";
+    
+    if (songTitle) {
+      content += `"${songTitle}"`;
+      if (artists) content += ` by ${artists}`;
+      content += " is ";
     }
-    pitchContent += " is ";
-  }
+    if (genre) content += `a ${genre} track that stands out in the current music landscape. `;
+    if (theme) content += `${theme} `;
+    if (lyrics) content += `Lyrics like "${lyrics}" capture the essence of the song. `;
+    if (production) content += `${production} `;
+    if (background) content += `${background} `;
+    if (targetPlaylist) content += `Perfect for ${targetPlaylist} playlists.`;
+    
+    return content;
+  };
 
-  if (genre) {
-    pitchContent += `a ${genre} track that stands out in the current music landscape. `;
-  }
-
-  if (theme) {
-    pitchContent += `${theme} `;
-  }
-
-  if (lyrics) {
-    pitchContent += `Lyrics like "${lyrics}" capture the essence of the song. `;
-  }
-
-  if (production) {
-    pitchContent += `${production} `;
-  }
-
-  if (background) {
-    pitchContent += `${background} `;
-  }
-
-  if (targetPlaylist) {
-    pitchContent += `Perfect for ${targetPlaylist} playlists.`;
-  }
+  const pitchContent = buildInitialPitch();
 
   const enhancePitch = useCallback(async (isRegeneration: boolean = false) => {
     if (!pitchContent || isPolishing) return;
@@ -139,68 +125,54 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
     });
   };
 
-  // Reset enhancement state when pitch content changes
   React.useEffect(() => {
     if (!shouldEnhance) {
       setHasEnhanced(false);
     }
   }, [shouldEnhance, pitchContent]);
 
-  // Only enhance when shouldEnhance is true and hasn't been enhanced yet
   React.useEffect(() => {
     if (shouldEnhance && pitchContent && !hasEnhanced) {
       enhancePitch(false);
     }
   }, [shouldEnhance, pitchContent, enhancePitch, hasEnhanced]);
 
-  // Only render if there's content and it should be enhanced (button clicked)
-  if (!shouldEnhance || !songTitle) return null;
+  if (!shouldEnhance || !data.songTitle) return null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3 }}
-      className="relative"
-    >
-      <Card className="glass-card overflow-hidden bg-gradient-to-br from-[#1A1F2C] to-[#2A2F3C] border-[#9b87f5]/20">
-        <CardContent className="p-6 space-y-4 text-left relative min-h-[200px]">
-          <div className="absolute top-0 right-0 p-4">
-            <CircuitBoard className="w-6 h-6 text-[#9b87f5]/30" />
-          </div>
-          
-          {isPolishing ? (
-            <LoadingAnimation />
-          ) : (
-            <PitchContent content={polishedPitch || pitchContent} />
-          )}
-          
-          <div className="relative pb-12">
-            <motion.div 
-              className="absolute bottom-0 right-0"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              <PitchActionButtons
-                onRegenerate={handleRegenerate}
-                onCopy={handleCopy}
-                onExport={handleExport}
-                isPolishing={isPolishing}
-                hasEnhanced={hasEnhanced}
-              />
-            </motion.div>
-          </div>
+    <PitchContainer>
+      <PitchHeader />
+      
+      {isPolishing ? (
+        <LoadingAnimation />
+      ) : (
+        <PitchContent content={polishedPitch || pitchContent} />
+      )}
+      
+      <div className="relative pb-12">
+        <motion.div 
+          className="absolute bottom-0 right-0 max-w-full px-4 sm:px-0"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          <PitchActionButtons
+            onRegenerate={handleRegenerate}
+            onCopy={handleCopy}
+            onExport={handleExport}
+            isPolishing={isPolishing}
+            hasEnhanced={hasEnhanced}
+          />
+        </motion.div>
+      </div>
 
-          {hasEnhanced && (
-            <PitchChat
-              currentPitch={polishedPitch || pitchContent}
-              onUpdatePitch={setPolishedPitch}
-            />
-          )}
-        </CardContent>
-      </Card>
-    </motion.div>
+      {hasEnhanced && (
+        <PitchChat
+          currentPitch={polishedPitch || pitchContent}
+          onUpdatePitch={setPolishedPitch}
+        />
+      )}
+    </PitchContainer>
   );
 };
 
