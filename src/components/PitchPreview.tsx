@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { polishPitch } from "@/utils/openai";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, CircuitBoard } from "lucide-react";
 
 type PitchPreviewProps = {
   data: {
@@ -123,28 +123,43 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
+      className="relative"
     >
-      <Card className="glass-card overflow-hidden">
-        <CardContent className="p-6 space-y-4 text-left">
-          <div className="flex justify-end">
-            {hasEnhanced && (
+      <Card className="glass-card overflow-hidden bg-gradient-to-br from-[#1A1F2C] to-[#2A2F3C] border-[#9b87f5]/20">
+        <CardContent className="p-6 space-y-4 text-left relative">
+          <div className="absolute top-0 right-0 p-4">
+            <CircuitBoard className="w-6 h-6 text-[#9b87f5]/30" />
+          </div>
+          
+          {(polishedPitch || pitchContent) && (
+            <motion.p 
+              className="text-white/90 whitespace-pre-wrap leading-relaxed"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              {polishedPitch || pitchContent}
+            </motion.p>
+          )}
+          
+          {hasEnhanced && (
+            <motion.div 
+              className="absolute bottom-4 right-4"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3 }}
+            >
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleRegenerate}
                 disabled={isPolishing}
-                className="gap-2"
+                className="gap-2 bg-[#9b87f5]/10 border-[#9b87f5]/30 hover:bg-[#9b87f5]/20 hover:border-[#9b87f5]/40 text-[#D6BCFA]"
               >
                 <RefreshCw className={`h-4 w-4 ${isPolishing ? 'animate-spin' : ''}`} />
                 Regenerate
               </Button>
-            )}
-          </div>
-          
-          {(polishedPitch || pitchContent) && (
-            <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
-              {polishedPitch || pitchContent}
-            </p>
+            </motion.div>
           )}
         </CardContent>
       </Card>
