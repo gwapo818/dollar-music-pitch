@@ -36,11 +36,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
         
         if (rpcError) {
           console.error('Error fetching PayPal credentials:', rpcError);
-          // Check if the error is due to missing configuration
-          if (rpcError.message && (
-            rpcError.message.includes('not configured') ||
-            rpcError.message.includes('PayPal credentials not configured')
-          )) {
+          if (rpcError.message && rpcError.message.includes('not configured')) {
             setError("PayPal is not properly configured. Please ensure both PAYPAL_CLIENT_ID and PAYPAL_SECRET_KEY are set in Supabase secrets.");
             toast.error("PayPal configuration is missing. Please contact support.");
           } else {
@@ -52,31 +48,16 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
 
         if (!data) {
           console.error('No PayPal credentials returned');
-          setError("PayPal configuration not found. Please ensure both PAYPAL_CLIENT_ID and PAYPAL_SECRET_KEY are set in Supabase secrets.");
+          setError("PayPal configuration not found.");
           toast.error("Payment system configuration is missing");
           return;
         }
 
-        // Type guard to ensure data has the correct shape
-        if (
-          typeof data === 'object' && 
-          data !== null && 
-          'client_id' in data && 
-          'secret_key' in data &&
-          typeof data.client_id === 'string' &&
-          typeof data.secret_key === 'string'
-        ) {
-          console.log("PayPal credentials retrieved successfully");
-          setCredentials({
-            client_id: data.client_id,
-            secret_key: data.secret_key
-          });
-        } else {
-          console.error('Invalid PayPal credentials format:', data);
-          setError("Invalid PayPal credentials format received from server");
-          toast.error("Invalid server configuration");
-          return;
-        }
+        console.log("PayPal credentials retrieved successfully");
+        setCredentials({
+          client_id: data.client_id,
+          secret_key: data.secret_key
+        });
       } catch (error) {
         console.error('Unexpected error:', error);
         setError("Failed to initialize payment system. Please try again later.");
