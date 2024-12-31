@@ -41,20 +41,20 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
           // Log the full error response for debugging
           console.error('Full error response:', JSON.stringify(rpcError, null, 2));
           
-          if (rpcError.message && (
-            rpcError.message.includes('not configured') || 
-            rpcError.message.includes('PayPal credentials not configured')
-          )) {
-            const errorMessage = "PayPal is not properly configured. Please ensure both PAYPAL_CLIENT_ID and PAYPAL_SECRET_KEY are set in Supabase secrets.";
+          // Check if the error is related to missing credentials
+          if (rpcError.message && rpcError.message.includes('not found or empty')) {
+            const errorMessage = "PayPal credentials are missing. Please ensure both PAYPAL_CLIENT_ID and PAYPAL_SECRET_KEY are set in Supabase secrets.";
             console.error(errorMessage);
             setError(errorMessage);
-            toast.error("PayPal configuration is missing. Please contact support.");
-          } else {
-            const errorMessage = `Failed to load payment system: ${rpcError.message}`;
-            console.error(errorMessage);
-            setError(errorMessage);
-            toast.error("Failed to load payment system. Please try again later.");
+            toast.error("PayPal configuration is incomplete. Please contact support.");
+            return;
           }
+          
+          // Handle other types of errors
+          const errorMessage = `Failed to load payment system: ${rpcError.message}`;
+          console.error(errorMessage);
+          setError(errorMessage);
+          toast.error("Failed to load payment system. Please try again later.");
           return;
         }
 
@@ -68,13 +68,15 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
             'client_id' in data &&
             'secret_key' in data &&
             typeof data.client_id === 'string' &&
-            typeof data.secret_key === 'string'
+            typeof data.secret_key === 'string' &&
+            data.client_id.length > 0 &&
+            data.secret_key.length > 0
           );
         };
 
         if (!isValidPayPalCredentials(data)) {
           console.error('Invalid PayPal credentials returned:', data);
-          setError("PayPal configuration is invalid or incomplete.");
+          setError("PayPal configuration is invalid or incomplete. Please ensure both PAYPAL_CLIENT_ID and PAYPAL_SECRET_KEY are properly set.");
           toast.error("Payment system configuration is invalid");
           return;
         }
