@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { GenreSelect } from "./GenreSelect";
+import { ProductionDetailsSelect } from "./ProductionDetailsSelect";
 
 export const FormFields = ({ form }: { form: any }) => {
   return (
@@ -100,26 +101,7 @@ export const FormFields = ({ form }: { form: any }) => {
         )}
       />
 
-      <FormField
-        control={form.control}
-        name="production"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel className="flex items-center gap-2">
-              <Radio className="w-4 h-4" />
-              Production Details
-            </FormLabel>
-            <FormControl>
-              <Textarea
-                placeholder="Describe the production and instrumentation"
-                className="form-input-transition min-h-[100px]"
-                {...field}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <ProductionDetailsSelect form={form} />
 
       <FormField
         control={form.control}
