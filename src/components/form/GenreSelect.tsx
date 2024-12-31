@@ -88,8 +88,8 @@ export const GenreSelect = ({ form }: { form: any }) => {
                   </span>
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-full p-0">
-                <Command>
+              <PopoverContent className="w-full p-0" align="start">
+                <Command shouldFilter={false}>
                   <CommandInput 
                     placeholder="Search genres..." 
                     value={searchValue}
