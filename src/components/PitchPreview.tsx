@@ -21,6 +21,7 @@ type PitchPreviewProps = {
 const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
   const [polishedPitch, setPolishedPitch] = useState<string>("");
   const [isPolishing, setIsPolishing] = useState(false);
+  const [hasEnhanced, setHasEnhanced] = useState(false);
   const { toast } = useToast();
   const { songTitle, artists, genre, theme, lyrics, production, background, targetPlaylist } = data;
   
@@ -52,12 +53,13 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
   }
 
   const enhancePitch = useCallback(async () => {
-    if (!pitchContent || isPolishing) return;
+    if (!pitchContent || isPolishing || hasEnhanced) return;
     
     setIsPolishing(true);
     try {
       const enhanced = await polishPitch(pitchContent);
       setPolishedPitch(enhanced);
+      setHasEnhanced(true);
     } catch (error: any) {
       console.error('Error enhancing pitch:', error);
       
@@ -79,14 +81,21 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
     } finally {
       setIsPolishing(false);
     }
-  }, [pitchContent, isPolishing, toast]);
+  }, [pitchContent, isPolishing, hasEnhanced, toast]);
 
-  // Only enhance when shouldEnhance is true
+  // Reset enhancement state when pitch content changes
   React.useEffect(() => {
-    if (shouldEnhance && pitchContent) {
+    if (!shouldEnhance) {
+      setHasEnhanced(false);
+    }
+  }, [shouldEnhance, pitchContent]);
+
+  // Only enhance when shouldEnhance is true and hasn't been enhanced yet
+  React.useEffect(() => {
+    if (shouldEnhance && pitchContent && !hasEnhanced) {
       enhancePitch();
     }
-  }, [shouldEnhance, pitchContent, enhancePitch]);
+  }, [shouldEnhance, pitchContent, enhancePitch, hasEnhanced]);
 
   // Only render if there's at least a title
   if (!songTitle) return null;
