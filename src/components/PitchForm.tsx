@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
@@ -17,8 +17,16 @@ type PitchFormData = {
   targetPlaylist: string;
 };
 
+const REQUIRED_FIELDS_COUNT = 5; // Minimum fields required to start countdown
+const COUNTDOWN_DELAY = 30; // Seconds to wait before starting countdown
+const COUNTDOWN_DURATION = 3; // Seconds for the countdown animation
+
 const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData, enhance?: boolean) => void }) => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [countdownProgress, setCountdownProgress] = useState(0);
+  const [shouldStartCountdown, setShouldStartCountdown] = useState(false);
+  const [countdownStarted, setCountdownStarted] = useState(false);
+
   const form = useForm<PitchFormData>({
     defaultValues: {
       songTitle: "",
@@ -32,24 +40,59 @@ const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData, enhance?: boo
     },
   });
 
-  // Watch form changes for real-time preview only
-  React.useEffect(() => {
+  // Watch form changes for real-time preview and countdown trigger
+  useEffect(() => {
     const subscription = form.watch((value) => {
       if (value && !isSubmitting) {
         onSubmit(value as PitchFormData, false);
+        
+        // Check if enough fields are filled to start countdown
+        const filledFieldsCount = Object.values(value).filter(Boolean).length;
+        setShouldStartCountdown(filledFieldsCount >= REQUIRED_FIELDS_COUNT);
       }
     });
     return () => subscription.unsubscribe();
   }, [form.watch, onSubmit, isSubmitting]);
+
+  // Handle countdown timer
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    
+    if (shouldStartCountdown && !countdownStarted) {
+      timer = setTimeout(() => {
+        setCountdownStarted(true);
+        const startTime = Date.now();
+        const countdownTimer = setInterval(() => {
+          const elapsed = (Date.now() - startTime) / 1000;
+          const progress = Math.min((elapsed / COUNTDOWN_DURATION) * 100, 100);
+          
+          setCountdownProgress(progress);
+          
+          if (progress >= 100) {
+            clearInterval(countdownTimer);
+            handleSubmit(form.getValues())();
+          }
+        }, 50);
+
+        return () => clearInterval(countdownTimer);
+      }, COUNTDOWN_DELAY * 1000);
+    }
+
+    return () => {
+      clearTimeout(timer);
+      setCountdownProgress(0);
+    };
+  }, [shouldStartCountdown, countdownStarted]);
 
   const handleSubmit = async (data: PitchFormData) => {
     if (isSubmitting) return;
     
     setIsSubmitting(true);
     try {
-      // Only enhance the pitch once when the button is clicked
       onSubmit(data, true);
       toast.success("Pitch created successfully!");
+      setCountdownStarted(false);
+      setCountdownProgress(0);
     } finally {
       setIsSubmitting(false);
     }
@@ -71,13 +114,26 @@ const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData, enhance?: boo
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
+          className="relative"
         >
           <Button
             type="submit"
-            className="w-full bg-spotify-accent hover:bg-spotify-accent/90"
+            className={`w-full relative overflow-hidden bg-gradient-to-r from-[#9b87f5] to-[#D6BCFA] hover:from-[#8B5CF6] hover:to-[#C4B5FD] text-white font-medium py-3 rounded-lg shadow-lg transform transition-all duration-200 hover:scale-[1.02] hover:shadow-xl ${
+              isSubmitting ? 'opacity-75' : ''
+            }`}
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Generating..." : "Generate Pitch"}
+            {countdownProgress > 0 && (
+              <motion.div
+                className="absolute left-0 top-0 h-full bg-gradient-to-r from-[#8B5CF6] to-[#C4B5FD] opacity-75"
+                initial={{ width: "0%" }}
+                animate={{ width: `${countdownProgress}%` }}
+                transition={{ duration: 0.1, ease: "linear" }}
+              />
+            )}
+            <span className="relative z-10">
+              {isSubmitting ? "Generating..." : "Generate Pitch"}
+            </span>
           </Button>
         </motion.div>
       </form>
