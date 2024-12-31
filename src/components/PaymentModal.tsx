@@ -38,7 +38,9 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
         
         if (rpcError) {
           console.error('Error fetching PayPal credentials:', rpcError);
-          // Check if the error is due to missing configuration
+          // Log the full error response for debugging
+          console.error('Full error response:', JSON.stringify(rpcError, null, 2));
+          
           if (rpcError.message && (
             rpcError.message.includes('not configured') || 
             rpcError.message.includes('PayPal credentials not configured')
@@ -56,7 +58,9 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
           return;
         }
 
-        // Type guard to check if data is a valid PayPalCredentials object
+        // Log the received data for debugging
+        console.log('Received data from RPC:', JSON.stringify(data, null, 2));
+
         const isValidPayPalCredentials = (data: Json): data is PayPalCredentials => {
           return (
             typeof data === 'object' &&
