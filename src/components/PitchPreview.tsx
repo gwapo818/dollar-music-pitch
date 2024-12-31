@@ -20,7 +20,7 @@ type PitchPreviewProps = {
   shouldEnhance: boolean;
 };
 
-const SPOTIFY_CHAR_LIMIT = 300;
+const SPOTIFY_CHAR_LIMIT = 500;
 
 const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
   const [polishedPitch, setPolishedPitch] = useState<string>("");
@@ -64,22 +64,13 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
     pitchContent += `Perfect for ${targetPlaylist} playlists.`;
   }
 
-  // Trim the pitch to respect Spotify's character limit
-  if (pitchContent.length > SPOTIFY_CHAR_LIMIT) {
-    pitchContent = pitchContent.substring(0, SPOTIFY_CHAR_LIMIT - 3) + "...";
-  }
-
   const enhancePitch = useCallback(async (isRegeneration: boolean = false) => {
     if (!pitchContent || isPolishing) return;
     
     setIsPolishing(true);
     try {
       const enhanced = await polishPitch(pitchContent, isRegeneration);
-      // Ensure the enhanced pitch also respects the character limit
-      const trimmedEnhanced = enhanced.length > SPOTIFY_CHAR_LIMIT 
-        ? enhanced.substring(0, SPOTIFY_CHAR_LIMIT - 3) + "..."
-        : enhanced;
-      setPolishedPitch(trimmedEnhanced);
+      setPolishedPitch(enhanced);
       setHasEnhanced(true);
     } catch (error: any) {
       console.error('Error enhancing pitch:', error);
@@ -135,10 +126,7 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
     >
       <Card className="glass-card overflow-hidden">
         <CardContent className="p-6 space-y-4 text-left">
-          <div className="flex justify-between items-center">
-            <div className="text-white/60 text-sm">
-              {SPOTIFY_CHAR_LIMIT - (polishedPitch || pitchContent).length} characters remaining
-            </div>
+          <div className="flex justify-end">
             {hasEnhanced && (
               <Button
                 variant="outline"

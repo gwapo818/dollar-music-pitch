@@ -8,6 +8,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+const SPOTIFY_CHAR_LIMIT = 500;
+
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 serve(async (req) => {
@@ -40,8 +42,8 @@ serve(async (req) => {
               {
                 role: 'system',
                 content: isRegeneration 
-                  ? 'You are a creative music industry professional. Generate a completely new version of this pitch while maintaining the same key information but with different wording and structure. Keep it concise (max 3 sentences).'
-                  : 'You are a professional music industry pitch writer. Your task is to polish and enhance music pitch descriptions while maintaining their core message and keeping them concise (max 3 sentences).'
+                  ? `You are a creative music industry professional. Generate a completely new version of this pitch while maintaining the same key information but with different wording and structure. The pitch must be exactly ${SPOTIFY_CHAR_LIMIT} characters or less.`
+                  : `You are a professional music industry pitch writer. Your task is to polish and enhance music pitch descriptions while maintaining their core message. The pitch must be exactly ${SPOTIFY_CHAR_LIMIT} characters or less.`
               },
               {
                 role: 'user',
