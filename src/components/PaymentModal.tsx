@@ -1,9 +1,11 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import PaymentError from "./payment/PaymentError";
+import PaymentLoading from "./payment/PaymentLoading";
+import PayPalButton from "./payment/PayPalButton";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -30,9 +32,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
       
       try {
         console.log("Fetching PayPal credentials...");
-        const { data, error: rpcError } = await supabase.rpc('get_paypal_credentials', {}, {
-          count: 'exact'
-        });
+        const { data, error: rpcError } = await supabase.rpc('get_paypal_credentials');
         
         if (rpcError) {
           console.error('Error fetching PayPal credentials:', rpcError);
@@ -93,48 +93,11 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
   };
 
   if (error) {
-    return (
-      <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="bg-app-card text-white">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-center">
-              Payment System Error
-            </DialogTitle>
-            <DialogDescription className="text-white/80 text-center">
-              {error}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="p-4 text-center">
-            <button
-              onClick={onClose}
-              className="mt-4 px-4 py-2 bg-app-accent rounded-lg hover:bg-app-accent/90"
-            >
-              Close
-            </button>
-          </div>
-        </DialogContent>
-      </Dialog>
-    );
+    return <PaymentError isOpen={isOpen} onClose={onClose} error={error} />;
   }
 
   if (!credentials || isLoading) {
-    return (
-      <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="bg-app-card text-white">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-center">
-              Loading Payment System...
-            </DialogTitle>
-            <DialogDescription className="text-white/80 text-center">
-              Please wait while we initialize the payment system
-            </DialogDescription>
-          </DialogHeader>
-          <div className="p-4 flex justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-app-accent"></div>
-          </div>
-        </DialogContent>
-      </Dialog>
-    );
+    return <PaymentLoading isOpen={isOpen} onClose={onClose} />;
   }
 
   return (
@@ -152,52 +115,10 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
           <p className="text-center mb-6 text-white/80">
             Pay $1 to access the pitch creation tool
           </p>
-          <PayPalScriptProvider
-            options={{
-              clientId: credentials.client_id,
-              currency: "USD",
-              intent: "capture",
-            }}
-          >
-            <PayPalButtons
-              style={{ layout: "vertical" }}
-              createOrder={(data, actions) => {
-                return actions.order.create({
-                  intent: "CAPTURE",
-                  purchase_units: [
-                    {
-                      amount: {
-                        currency_code: "USD",
-                        value: "1.00",
-                      },
-                      description: "Music Pitch Creator Access",
-                    },
-                  ],
-                });
-              }}
-              onApprove={async (data, actions) => {
-                if (actions.order) {
-                  try {
-                    const order = await actions.order.capture();
-                    console.log("Payment completed:", order);
-                    if (order.status === "COMPLETED") {
-                      handlePaymentSuccess();
-                    }
-                  } catch (error) {
-                    console.error("Payment capture error:", error);
-                    toast.error("Payment failed. Please try again.");
-                  }
-                }
-              }}
-              onError={(err) => {
-                console.error("PayPal error:", err);
-                toast.error("Payment failed. Please try again.");
-              }}
-              onCancel={() => {
-                toast.error("Payment cancelled");
-              }}
-            />
-          </PayPalScriptProvider>
+          <PayPalButton 
+            clientId={credentials.client_id}
+            onSuccess={handlePaymentSuccess}
+          />
         </div>
       </DialogContent>
     </Dialog>
