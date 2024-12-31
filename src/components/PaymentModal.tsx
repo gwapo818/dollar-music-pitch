@@ -77,12 +77,14 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
               onApprove={async (data, actions) => {
                 if (actions.order) {
                   const order = await actions.order.capture();
+                  console.log("Payment completed:", order);
                   if (order.status === "COMPLETED") {
                     handlePaymentSuccess();
                   }
                 }
               }}
-              onError={() => {
+              onError={(err) => {
+                console.error("PayPal error:", err);
                 toast.error("Payment failed. Please try again.");
               }}
             />
