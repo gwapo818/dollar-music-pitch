@@ -18,6 +18,7 @@ type PitchFormData = {
 };
 
 const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData, enhance?: boolean) => void }) => {
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const form = useForm<PitchFormData>({
     defaultValues: {
       songTitle: "",
@@ -31,20 +32,27 @@ const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData, enhance?: boo
     },
   });
 
-  // Watch form changes for real-time preview (without enhancement)
+  // Watch form changes for real-time preview only
   React.useEffect(() => {
     const subscription = form.watch((value) => {
-      if (value) {
+      if (value && !isSubmitting) {
         onSubmit(value as PitchFormData, false);
       }
     });
     return () => subscription.unsubscribe();
-  }, [form.watch, onSubmit]);
+  }, [form.watch, onSubmit, isSubmitting]);
 
   const handleSubmit = async (data: PitchFormData) => {
-    // Only enhance the pitch once when the button is clicked
-    onSubmit(data, true);
-    toast.success("Pitch created successfully!");
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
+    try {
+      // Only enhance the pitch once when the button is clicked
+      onSubmit(data, true);
+      toast.success("Pitch created successfully!");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -67,8 +75,9 @@ const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData, enhance?: boo
           <Button
             type="submit"
             className="w-full bg-spotify-accent hover:bg-spotify-accent/90"
+            disabled={isSubmitting}
           >
-            Generate Pitch
+            {isSubmitting ? "Generating..." : "Generate Pitch"}
           </Button>
         </motion.div>
       </form>
