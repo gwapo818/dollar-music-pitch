@@ -71,7 +71,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
               Payment System Error
             </DialogTitle>
             <DialogDescription className="text-white/80 text-center">
-              We encountered an issue with the payment system
+              We encountered an issue with the payment system. Please try again later.
             </DialogDescription>
           </DialogHeader>
           <div className="p-4 text-center">
@@ -127,6 +127,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
             options={{
               clientId: clientId,
               currency: "USD",
+              intent: "capture",
             }}
           >
             <PayPalButtons
