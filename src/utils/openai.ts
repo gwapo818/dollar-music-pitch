@@ -2,21 +2,21 @@ import OpenAI from 'openai';
 import { supabase } from '@/integrations/supabase/client';
 
 const getOpenAIClient = async () => {
-  const { data: { secret: apiKey } } = await supabase.functions.invoke('get-secret', {
+  const { data: { secret: apiKey }, error: apiKeyError } = await supabase.functions.invoke('get-secret', {
     body: { name: 'OPENAI_API_KEY' }
   });
   
-  const { data: { secret: orgId } } = await supabase.functions.invoke('get-secret', {
+  const { data: { secret: orgId }, error: orgError } = await supabase.functions.invoke('get-secret', {
     body: { name: 'OPENAI_ORG_ID' }
   });
   
-  if (!apiKey) {
-    throw new Error("OpenAI API key not found");
+  if (apiKeyError || !apiKey) {
+    throw new Error("OpenAI API key not found or invalid");
   }
 
   return new OpenAI({
     apiKey,
-    organization: orgId, // Will be undefined if not set, which is fine
+    organization: orgId || undefined,
     dangerouslyAllowBrowser: true
   });
 };
@@ -26,7 +26,7 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
     const openai = await getOpenAIClient();
     
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-3.5-turbo", // Using a standard model name
       messages: [
         {
           role: "system",
@@ -60,6 +60,7 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
       throw new Error("OpenAI API quota exceeded. Using original pitch content.");
     }
     
+    // For any other error, throw it to be handled by the component
     throw error;
   }
 };
