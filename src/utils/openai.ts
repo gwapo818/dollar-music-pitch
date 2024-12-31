@@ -41,7 +41,7 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
     
     console.log('Making OpenAI API request...');
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",  // Using a standard model that's definitely available
+      model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
@@ -58,7 +58,6 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
 
     const enhancedPitch = response.choices[0].message.content;
     if (!enhancedPitch) {
-      console.error('No response content from OpenAI');
       throw new Error("No response from OpenAI");
     }
     
@@ -67,24 +66,20 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
   } catch (error: any) {
     console.error('Error in polishPitch:', error);
     
-    // Check for quota exceeded error specifically
+    // Check for quota exceeded or rate limit errors
     if (error?.status === 429 || 
-        (error?.message && error.message.includes("quota exceeded")) ||
-        (error?.error?.type === "insufficient_quota")) {
-      throw new Error("OpenAI API quota exceeded. Using original pitch content.");
+        error?.message?.includes("quota exceeded") ||
+        error?.error?.type === "insufficient_quota" ||
+        (error?.error?.message && error.error.message.includes("quota exceeded"))) {
+      throw new Error("OpenAI API quota exceeded. Please check your billing details or try again later.");
     }
     
     // Check for authentication errors
-    if (error?.status === 401 || (error?.message && error.message.includes("invalid_api_key"))) {
-      console.error('Authentication error details:', {
-        status: error?.status,
-        message: error?.message,
-        response: error?.response
-      });
+    if (error?.status === 401 || error?.message?.includes("invalid_api_key")) {
       throw new Error("Invalid OpenAI API key. Please check your API key configuration.");
     }
     
-    // For any other error, throw it to be handled by the component
-    throw error;
+    // For any other error, throw a generic message
+    throw new Error("Failed to enhance pitch. Using original content.");
   }
 };

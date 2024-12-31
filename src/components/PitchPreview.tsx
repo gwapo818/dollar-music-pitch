@@ -59,16 +59,23 @@ const PitchPreview = ({ data }: PitchPreviewProps) => {
       setPolishedPitch(enhanced);
     } catch (error: any) {
       console.error('Error enhancing pitch:', error);
+      
       // Show a more specific error message for quota exceeded
-      toast({
-        title: error.message.includes("quota exceeded") 
-          ? "AI Enhancement Unavailable" 
-          : "Error Polishing Pitch",
-        description: error.message.includes("quota exceeded")
-          ? "Using original pitch content due to API limits."
-          : "Using original pitch instead",
-        variant: "destructive",
-      });
+      if (error.message.includes("quota exceeded")) {
+        toast({
+          title: "AI Enhancement Unavailable",
+          description: "Using original pitch content due to API limits.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error Polishing Pitch",
+          description: "Using original pitch instead",
+          variant: "destructive",
+        });
+      }
+      
+      // Use the original pitch content as fallback
       setPolishedPitch(pitchContent);
     } finally {
       setIsPolishing(false);
