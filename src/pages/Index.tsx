@@ -25,9 +25,11 @@ const Index = () => {
     background: "",
     targetPlaylist: "",
   });
+  const [shouldEnhance, setShouldEnhance] = useState(false);
 
-  const handleFormUpdate = (data: PitchData) => {
+  const handleFormUpdate = (data: PitchData, enhance: boolean = false) => {
     setPitchData(data);
+    setShouldEnhance(enhance);
   };
 
   return (
@@ -50,7 +52,7 @@ const Index = () => {
             <PitchForm onSubmit={handleFormUpdate} />
           </div>
           <div className="lg:sticky lg:top-8 space-y-8">
-            <PitchPreview data={pitchData} />
+            <PitchPreview data={pitchData} shouldEnhance={shouldEnhance} />
           </div>
         </div>
       </motion.div>

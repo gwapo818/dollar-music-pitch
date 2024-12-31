@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { polishPitch } from "@/utils/openai";
@@ -15,12 +15,12 @@ type PitchPreviewProps = {
     background: string;
     targetPlaylist: string;
   };
+  shouldEnhance: boolean;
 };
 
-const PitchPreview = ({ data }: PitchPreviewProps) => {
+const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
   const [polishedPitch, setPolishedPitch] = useState<string>("");
   const [isPolishing, setIsPolishing] = useState(false);
-  const [lastUpdateTimestamp, setLastUpdateTimestamp] = useState<number>(0);
   const { toast } = useToast();
   const { songTitle, artists, genre, theme, lyrics, production, background, targetPlaylist } = data;
   
@@ -81,22 +81,12 @@ const PitchPreview = ({ data }: PitchPreviewProps) => {
     }
   }, [pitchContent, isPolishing, toast]);
 
-  useEffect(() => {
-    // Update timestamp when content changes
-    const currentTime = Date.now();
-    setLastUpdateTimestamp(currentTime);
-
-    // Set a timeout to check if enough time has passed since the last update
-    const timeoutId = setTimeout(() => {
-      const timeSinceLastUpdate = Date.now() - currentTime;
-      // Only proceed if this was the last update and 2 seconds have passed
-      if (timeSinceLastUpdate >= 2000 && currentTime === lastUpdateTimestamp && pitchContent) {
-        enhancePitch();
-      }
-    }, 2000); // Wait 2 seconds after the last change
-
-    return () => clearTimeout(timeoutId);
-  }, [pitchContent, enhancePitch, lastUpdateTimestamp]);
+  // Only enhance when shouldEnhance is true
+  React.useEffect(() => {
+    if (shouldEnhance && pitchContent) {
+      enhancePitch();
+    }
+  }, [shouldEnhance, pitchContent, enhancePitch]);
 
   // Only render if there's at least a title
   if (!songTitle) return null;

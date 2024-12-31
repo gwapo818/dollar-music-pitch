@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +6,6 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -27,7 +26,7 @@ type PitchFormData = {
   targetPlaylist: string;
 };
 
-const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData) => void }) => {
+const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData, enhance?: boolean) => void }) => {
   const form = useForm<PitchFormData>({
     defaultValues: {
       songTitle: "",
@@ -44,13 +43,15 @@ const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData) => void }) =>
   // Watch all form fields for changes
   React.useEffect(() => {
     const subscription = form.watch((value) => {
-      // Pass the current form values to parent component
-      onSubmit(value as PitchFormData);
+      // Pass the current form values to parent component without enhancement
+      onSubmit(value as PitchFormData, false);
     });
     return () => subscription.unsubscribe();
   }, [form.watch, onSubmit]);
 
   const handleSubmit = (data: PitchFormData) => {
+    // Pass the form data with enhancement flag
+    onSubmit(data, true);
     toast.success("Pitch created successfully!");
   };
 
