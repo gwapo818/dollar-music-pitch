@@ -124,7 +124,7 @@ export const GenreSelect = ({ form }: { form: any }) => {
                     )}
                   </CommandEmpty>
                   <CommandGroup>
-                    {filteredGenres.map((genre) => (
+                    {filteredGenres.length > 0 && filteredGenres.map((genre) => (
                       <CommandItem
                         key={genre}
                         value={genre}
