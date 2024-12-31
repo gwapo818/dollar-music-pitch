@@ -6,8 +6,13 @@ const getOpenAIClient = async () => {
     body: { name: 'OPENAI_API_KEY' }
   });
   
+  const { data: { secret: orgId } } = await supabase.functions.invoke('get-secret', {
+    body: { name: 'OPENAI_ORG_ID' }
+  });
+  
   return new OpenAI({
     apiKey,
+    organization: orgId, // Will be undefined if not set, which is fine
     dangerouslyAllowBrowser: true
   });
 };
