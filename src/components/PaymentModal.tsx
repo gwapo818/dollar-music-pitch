@@ -36,7 +36,11 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
         
         if (rpcError) {
           console.error('Error fetching PayPal credentials:', rpcError);
-          if (rpcError.message && rpcError.message.includes('not configured')) {
+          // Check if the error is due to missing configuration
+          if (rpcError.message && (
+            rpcError.message.includes('not configured') ||
+            rpcError.message.includes('PayPal credentials not configured')
+          )) {
             setError("PayPal is not properly configured. Please ensure both PAYPAL_CLIENT_ID and PAYPAL_SECRET_KEY are set in Supabase secrets.");
             toast.error("PayPal configuration is missing. Please contact support.");
           } else {
