@@ -20,6 +20,7 @@ type PitchPreviewProps = {
 const PitchPreview = ({ data }: PitchPreviewProps) => {
   const [polishedPitch, setPolishedPitch] = useState<string>("");
   const [isPolishing, setIsPolishing] = useState(false);
+  const [lastUpdateTimestamp, setLastUpdateTimestamp] = useState<number>(0);
   const { toast } = useToast();
   const { songTitle, artists, genre, theme, lyrics, production, background, targetPlaylist } = data;
   
@@ -60,7 +61,6 @@ const PitchPreview = ({ data }: PitchPreviewProps) => {
     } catch (error: any) {
       console.error('Error enhancing pitch:', error);
       
-      // Show a more specific error message for quota exceeded
       if (error.message.includes("quota exceeded")) {
         toast({
           title: "AI Enhancement Unavailable",
@@ -75,7 +75,6 @@ const PitchPreview = ({ data }: PitchPreviewProps) => {
         });
       }
       
-      // Use the original pitch content as fallback
       setPolishedPitch(pitchContent);
     } finally {
       setIsPolishing(false);
@@ -83,14 +82,21 @@ const PitchPreview = ({ data }: PitchPreviewProps) => {
   }, [pitchContent, isPolishing, toast]);
 
   useEffect(() => {
+    // Update timestamp when content changes
+    const currentTime = Date.now();
+    setLastUpdateTimestamp(currentTime);
+
+    // Set a timeout to check if enough time has passed since the last update
     const timeoutId = setTimeout(() => {
-      if (pitchContent) {
+      const timeSinceLastUpdate = Date.now() - currentTime;
+      // Only proceed if this was the last update and 2 seconds have passed
+      if (timeSinceLastUpdate >= 2000 && currentTime === lastUpdateTimestamp && pitchContent) {
         enhancePitch();
       }
-    }, 1500);
+    }, 2000); // Wait 2 seconds after the last change
 
     return () => clearTimeout(timeoutId);
-  }, [pitchContent, enhancePitch]);
+  }, [pitchContent, enhancePitch, lastUpdateTimestamp]);
 
   // Only render if there's at least a title
   if (!songTitle) return null;
