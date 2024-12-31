@@ -18,11 +18,16 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
 
   useEffect(() => {
     const fetchClientId = async () => {
+      if (!isOpen) return;
+      
       setIsLoading(true);
       setError(null);
+      
       try {
         console.log("Fetching PayPal client ID...");
-        const { data, error: rpcError } = await supabase.rpc('get_paypal_client_id');
+        const { data, error: rpcError } = await supabase.rpc('get_paypal_client_id', {}, {
+          count: 'exact'
+        });
         
         if (rpcError) {
           console.error('Error fetching PayPal client ID:', rpcError);
@@ -31,15 +36,15 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
           return;
         }
 
-        console.log("PayPal client ID response:", data);
-        
-        if (data) {
-          setClientId(data);
-        } else {
+        if (!data) {
           console.error('No PayPal client ID returned');
           setError("PayPal configuration not found");
           toast.error("Payment system configuration is missing");
+          return;
         }
+
+        console.log("PayPal client ID retrieved successfully");
+        setClientId(data);
       } catch (error) {
         console.error('Unexpected error:', error);
         setError("Failed to initialize payment system");
@@ -49,9 +54,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
       }
     };
 
-    if (isOpen) {
-      fetchClientId();
-    }
+    fetchClientId();
   }, [isOpen]);
 
   const handlePaymentSuccess = () => {
