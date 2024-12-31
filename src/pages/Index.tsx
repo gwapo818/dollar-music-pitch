@@ -75,14 +75,12 @@ const Index = () => {
             </motion.div>
           </div>
 
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="space-y-8">
-                <PitchForm onSubmit={handleFormUpdate} />
-              </div>
-              <div className="lg:sticky lg:top-8 space-y-8">
-                <PitchPreview data={pitchData} shouldEnhance={shouldEnhance} />
-              </div>
+          <div className="max-w-3xl mx-auto space-y-8">
+            <div className="space-y-8">
+              <PitchForm onSubmit={handleFormUpdate} />
+            </div>
+            <div className="space-y-8">
+              <PitchPreview data={pitchData} shouldEnhance={shouldEnhance} />
             </div>
           </div>
         </motion.div>
