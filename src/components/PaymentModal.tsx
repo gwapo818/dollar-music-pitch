@@ -2,6 +2,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -10,6 +12,23 @@ interface PaymentModalProps {
 
 const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
   const navigate = useNavigate();
+  const [clientId, setClientId] = useState<string>("");
+
+  useEffect(() => {
+    const fetchClientId = async () => {
+      const { data, error } = await supabase.rpc('get_paypal_client_id');
+      if (error) {
+        console.error('Error fetching PayPal client ID:', error);
+        toast.error("Failed to load payment system. Please try again later.");
+        return;
+      }
+      setClientId(data || "");
+    };
+
+    if (isOpen) {
+      fetchClientId();
+    }
+  }, [isOpen]);
 
   const handlePaymentSuccess = () => {
     localStorage.setItem("payment_completed", "true");
@@ -17,6 +36,10 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
     onClose();
     navigate("/pitch");
   };
+
+  if (!clientId) {
+    return null;
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -32,7 +55,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
           </p>
           <PayPalScriptProvider
             options={{
-              clientId: "test", // Replace with your PayPal client ID in production
+              clientId: clientId,
               currency: "USD",
             }}
           >
@@ -43,6 +66,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
                   purchase_units: [
                     {
                       amount: {
+                        currency_code: "USD",
                         value: "1.00",
                       },
                     },
