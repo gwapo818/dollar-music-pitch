@@ -40,18 +40,16 @@ const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData, enhance?: boo
     },
   });
 
-  // Watch form changes for real-time preview and countdown trigger
+  // Watch form changes only for countdown trigger
   useEffect(() => {
     const subscription = form.watch((value) => {
-      if (value && !isSubmitting) {
-        onSubmit(value as PitchFormData, false);
-        
+      if (value) {
         const filledFieldsCount = Object.values(value).filter(Boolean).length;
         setShouldStartCountdown(filledFieldsCount >= REQUIRED_FIELDS_COUNT);
       }
     });
     return () => subscription.unsubscribe();
-  }, [form.watch, onSubmit, isSubmitting]);
+  }, [form.watch]);
 
   // Handle countdown timer
   useEffect(() => {

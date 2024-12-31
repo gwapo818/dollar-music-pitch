@@ -152,8 +152,8 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
     }
   }, [shouldEnhance, pitchContent, enhancePitch, hasEnhanced]);
 
-  // Only render if there's at least a title
-  if (!songTitle) return null;
+  // Only render if there's content and it should be enhanced (button clicked)
+  if (!shouldEnhance || !songTitle) return null;
 
   return (
     <motion.div
