@@ -43,7 +43,7 @@ export const FormFields = ({ form }: { form: any }) => {
           <FormItem>
             <FormLabel className="flex items-center gap-2">
               <Mic className="w-4 h-4" />
-              Featured Artists
+              Featured Artist(s) Names
             </FormLabel>
             <FormControl>
               <Input
@@ -66,7 +66,7 @@ export const FormFields = ({ form }: { form: any }) => {
           <FormItem>
             <FormLabel className="flex items-center gap-2">
               <BookText className="w-4 h-4" />
-              Song Theme or Story
+              Song Theme, Story or Lyrics
             </FormLabel>
             <FormControl>
               <Textarea
@@ -110,7 +110,7 @@ export const FormFields = ({ form }: { form: any }) => {
           <FormItem>
             <FormLabel className="flex items-center gap-2">
               <User className="w-4 h-4" />
-              Artist Background
+              Artist(s) Background
             </FormLabel>
             <FormControl>
               <Textarea
