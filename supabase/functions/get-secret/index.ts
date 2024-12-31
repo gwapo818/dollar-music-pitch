@@ -15,7 +15,26 @@ serve(async (req) => {
     const secret = Deno.env.get(name)
     
     if (!secret) {
-      throw new Error(`Secret ${name} not found`)
+      console.error(`Secret ${name} not found`)
+      return new Response(
+        JSON.stringify({ error: `Secret ${name} not found` }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 404,
+        },
+      )
+    }
+
+    // Validate that the secret is not malformed
+    if (secret.includes('*')) {
+      console.error(`Secret ${name} appears to be malformed`)
+      return new Response(
+        JSON.stringify({ error: `Secret ${name} appears to be malformed` }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 400,
+        },
+      )
     }
 
     return new Response(
@@ -26,11 +45,12 @@ serve(async (req) => {
       },
     )
   } catch (error) {
+    console.error('Error in get-secret function:', error)
     return new Response(
       JSON.stringify({ error: error.message }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 400,
+        status: 500,
       },
     )
   }

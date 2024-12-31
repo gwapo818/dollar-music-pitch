@@ -2,16 +2,25 @@ import OpenAI from 'openai';
 import { supabase } from '@/integrations/supabase/client';
 
 const getOpenAIClient = async () => {
-  const { data: { secret: apiKey }, error: apiKeyError } = await supabase.functions.invoke('get-secret', {
+  const { data: apiKeyData, error: apiKeyError } = await supabase.functions.invoke('get-secret', {
     body: { name: 'OPENAI_API_KEY' }
   });
   
-  const { data: { secret: orgId }, error: orgError } = await supabase.functions.invoke('get-secret', {
+  const { data: orgData, error: orgError } = await supabase.functions.invoke('get-secret', {
     body: { name: 'OPENAI_ORG_ID' }
   });
   
-  if (apiKeyError || !apiKey) {
-    throw new Error("OpenAI API key not found or invalid");
+  if (apiKeyError || !apiKeyData?.secret) {
+    console.error('Error retrieving OpenAI API key:', apiKeyError);
+    throw new Error("Failed to retrieve OpenAI API key. Please check your configuration.");
+  }
+
+  const apiKey = apiKeyData.secret;
+  const orgId = orgData?.secret;
+
+  // Basic validation of API key format
+  if (!apiKey.startsWith('sk-') || apiKey.length < 20) {
+    throw new Error("Invalid OpenAI API key format. Please check your API key.");
   }
 
   return new OpenAI({
@@ -26,7 +35,7 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
     const openai = await getOpenAIClient();
     
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo", // Using a standard model name
+      model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
