@@ -30,7 +30,9 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
       
       try {
         console.log("Fetching PayPal credentials...");
-        const { data, error: rpcError } = await supabase.rpc('get_paypal_credentials');
+        const { data, error: rpcError } = await supabase.rpc('get_paypal_credentials', {}, {
+          count: 'exact'
+        });
         
         if (rpcError) {
           console.error('Error fetching PayPal credentials:', rpcError);
@@ -66,7 +68,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
             secret_key: data.secret_key
           });
         } else {
-          console.error('Invalid PayPal credentials format');
+          console.error('Invalid PayPal credentials format:', data);
           setError("Invalid PayPal credentials format received from server");
           toast.error("Invalid server configuration");
           return;
