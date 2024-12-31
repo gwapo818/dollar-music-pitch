@@ -29,11 +29,12 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
         
         if (rpcError) {
           console.error('Error fetching PayPal client ID:', rpcError);
-          if (rpcError.message.includes('not configured')) {
-            setError("PayPal is not properly configured. Please contact support.");
-            toast.error("PayPal configuration is missing. Please try again later.");
+          // Check if the error is due to missing configuration
+          if (rpcError.message && rpcError.message.includes('not configured')) {
+            setError("PayPal is not properly configured. Please ensure PAYPAL_CLIENT_ID is set in Supabase secrets.");
+            toast.error("PayPal configuration is missing. Please contact support.");
           } else {
-            setError("Failed to load payment system");
+            setError(`Failed to load payment system: ${rpcError.message}`);
             toast.error("Failed to load payment system. Please try again later.");
           }
           return;
@@ -41,7 +42,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
 
         if (!data) {
           console.error('No PayPal client ID returned');
-          setError("PayPal configuration not found");
+          setError("PayPal configuration not found. Please ensure PAYPAL_CLIENT_ID is set in Supabase secrets.");
           toast.error("Payment system configuration is missing");
           return;
         }
@@ -50,7 +51,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
         setClientId(data);
       } catch (error) {
         console.error('Unexpected error:', error);
-        setError("Failed to initialize payment system");
+        setError("Failed to initialize payment system. Please try again later.");
         toast.error("Failed to initialize payment system");
       } finally {
         setIsLoading(false);
