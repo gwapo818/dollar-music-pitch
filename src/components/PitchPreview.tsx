@@ -31,7 +31,7 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
   const { toast } = useToast();
   
   // Build the initial pitch paragraph
-  const buildInitialPitch = () => {
+  const buildInitialPitch = useCallback(() => {
     const { songTitle, artists, genre, theme, lyrics, production, background, targetPlaylist } = data;
     let content = "";
     
@@ -48,7 +48,7 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
     if (targetPlaylist) content += `Perfect for ${targetPlaylist} playlists.`;
     
     return content;
-  };
+  }, [data]);
 
   const pitchContent = buildInitialPitch();
 
@@ -125,11 +125,11 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
     });
   };
 
+  // Reset state when form data changes
   React.useEffect(() => {
-    if (!shouldEnhance) {
-      setHasEnhanced(false);
-    }
-  }, [shouldEnhance, pitchContent]);
+    setHasEnhanced(false);
+    setPolishedPitch("");
+  }, [data]);
 
   React.useEffect(() => {
     if (shouldEnhance && pitchContent && !hasEnhanced) {
