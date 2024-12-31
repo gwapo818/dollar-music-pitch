@@ -54,18 +54,16 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
           return;
         }
 
-        if (!data || !data.client_id || !data.secret_key) {
-          console.error('Invalid PayPal credentials returned:', data);
+        const paypalData = data as PayPalCredentials;
+        if (!paypalData || !paypalData.client_id || !paypalData.secret_key) {
+          console.error('Invalid PayPal credentials returned:', paypalData);
           setError("PayPal configuration is invalid or incomplete.");
           toast.error("Payment system configuration is invalid");
           return;
         }
 
         console.log("PayPal credentials retrieved successfully");
-        setCredentials({
-          client_id: data.client_id,
-          secret_key: data.secret_key
-        });
+        setCredentials(paypalData);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
         console.error('Unexpected error:', errorMessage);
