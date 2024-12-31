@@ -3,9 +3,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { polishPitch } from "@/utils/openai";
 import { useToast } from "@/components/ui/use-toast";
-import { Button } from "@/components/ui/button";
-import { RefreshCw, CircuitBoard, Copy, Download } from "lucide-react";
+import { CircuitBoard } from "lucide-react";
 import { jsPDF } from "jspdf";
+import PitchActionButtons from "./pitch/PitchActionButtons";
 
 type PitchPreviewProps = {
   data: {
@@ -123,16 +123,13 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
     const doc = new jsPDF();
     const textToExport = polishedPitch || pitchContent;
     
-    // Add title
     doc.setFontSize(16);
     doc.text("Music Pitch", 20, 20);
     
-    // Add content with word wrap
     doc.setFontSize(12);
     const splitText = doc.splitTextToSize(textToExport, 170);
     doc.text(splitText, 20, 40);
     
-    // Save the PDF
     doc.save("music-pitch.pdf");
     
     toast({
@@ -166,14 +163,14 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
       className="relative"
     >
       <Card className="glass-card overflow-hidden bg-gradient-to-br from-[#1A1F2C] to-[#2A2F3C] border-[#9b87f5]/20">
-        <CardContent className="p-6 space-y-4 text-left relative">
+        <CardContent className="p-6 space-y-4 text-left relative min-h-[200px]">
           <div className="absolute top-0 right-0 p-4">
             <CircuitBoard className="w-6 h-6 text-[#9b87f5]/30" />
           </div>
           
           {(polishedPitch || pitchContent) && (
             <motion.p 
-              className="text-white/90 whitespace-pre-wrap leading-relaxed mb-12"
+              className="text-white/90 whitespace-pre-wrap leading-relaxed pb-16"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
@@ -183,43 +180,18 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
           )}
           
           <motion.div 
-            className="absolute bottom-4 right-4 flex gap-2"
+            className="absolute bottom-4 right-4"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleCopy}
-              className="gap-2 bg-[#9b87f5]/10 border-[#9b87f5]/30 hover:bg-[#9b87f5]/20 hover:border-[#9b87f5]/40 text-[#D6BCFA]"
-            >
-              <Copy className="h-4 w-4" />
-              Copy
-            </Button>
-            
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleExport}
-              className="gap-2 bg-[#9b87f5]/10 border-[#9b87f5]/30 hover:bg-[#9b87f5]/20 hover:border-[#9b87f5]/40 text-[#D6BCFA]"
-            >
-              <Download className="h-4 w-4" />
-              Export
-            </Button>
-
-            {hasEnhanced && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleRegenerate}
-                disabled={isPolishing}
-                className="gap-2 bg-[#9b87f5]/10 border-[#9b87f5]/30 hover:bg-[#9b87f5]/20 hover:border-[#9b87f5]/40 text-[#D6BCFA]"
-              >
-                <RefreshCw className={`h-4 w-4 ${isPolishing ? 'animate-spin' : ''}`} />
-                Regenerate
-              </Button>
-            )}
+            <PitchActionButtons
+              onRegenerate={handleRegenerate}
+              onCopy={handleCopy}
+              onExport={handleExport}
+              isPolishing={isPolishing}
+              hasEnhanced={hasEnhanced}
+            />
           </motion.div>
         </CardContent>
       </Card>
