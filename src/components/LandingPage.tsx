@@ -1,11 +1,23 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Music2, Sparkles, Target } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
 import { Button } from "./ui/button";
+import PaymentModal from "./PaymentModal";
 
 const LandingPage = () => {
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+
+  const handleStartCreating = () => {
+    setShowPaymentModal(true);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-app-dark via-[#232838] to-[#1A1F2C] text-white">
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+      />
+      
       {/* Hero Section */}
       <div className="px-4 py-16 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
@@ -21,14 +33,13 @@ const LandingPage = () => {
               Create compelling music pitches that get noticed, all for just{" "}
               <span className="text-app-accent font-semibold">$1</span>
             </p>
-            <Link to="/pitch">
-              <Button
-                size="lg"
-                className="bg-app-accent hover:bg-app-accent/90 text-white px-8 py-6 text-lg rounded-full"
-              >
-                Start Creating <ArrowRight className="ml-2" />
-              </Button>
-            </Link>
+            <Button
+              size="lg"
+              className="bg-app-accent hover:bg-app-accent/90 text-white px-8 py-6 text-lg rounded-full"
+              onClick={handleStartCreating}
+            >
+              Start Creating <ArrowRight className="ml-2" />
+            </Button>
           </motion.div>
         </div>
       </div>
@@ -126,14 +137,13 @@ const LandingPage = () => {
             <p className="text-xl text-white/80 mb-8">
               Start crafting your professional music pitch now for just $1
             </p>
-            <Link to="/pitch">
-              <Button
-                size="lg"
-                className="bg-app-accent hover:bg-app-accent/90 text-white px-8 py-6 text-lg rounded-full"
-              >
-                Get Started <ArrowRight className="ml-2" />
-              </Button>
-            </Link>
+            <Button
+              size="lg"
+              className="bg-app-accent hover:bg-app-accent/90 text-white px-8 py-6 text-lg rounded-full"
+              onClick={handleStartCreating}
+            >
+              Get Started <ArrowRight className="ml-2" />
+            </Button>
           </motion.div>
         </div>
       </div>
