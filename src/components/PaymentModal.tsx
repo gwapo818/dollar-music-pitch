@@ -63,6 +63,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
               style={{ layout: "vertical" }}
               createOrder={(data, actions) => {
                 return actions.order.create({
+                  intent: "CAPTURE",
                   purchase_units: [
                     {
                       amount: {
