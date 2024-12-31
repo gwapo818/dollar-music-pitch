@@ -18,14 +18,12 @@ const getOpenAIClient = async () => {
   const apiKey = apiKeyData.secret;
   const orgId = orgData?.secret;
 
-  console.log('API Key format check:', {
-    startsWithSk: apiKey.startsWith('sk-'),
-    length: apiKey.length,
-    firstFiveChars: apiKey.substring(0, 5)
+  console.log('API Key validation check:', {
+    isPresent: !!apiKey,
+    length: apiKey.length
   });
 
-  // Basic validation of API key format
-  if (!apiKey.startsWith('sk-') || apiKey.length < 20) {
+  if (!apiKey || apiKey.length < 20) {
     throw new Error("Invalid OpenAI API key format. Please check your API key.");
   }
 
@@ -43,7 +41,7 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
     
     console.log('Making OpenAI API request...');
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini", // Updated to use the correct model name
+      model: "gpt-3.5-turbo",  // Using a standard model that's definitely available
       messages: [
         {
           role: "system",
