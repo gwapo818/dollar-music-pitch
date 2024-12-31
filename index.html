@@ -11,6 +11,14 @@
 
   <body>
     <div id="root"></div>
+    <script>
+      window.addEventListener('error', function(event) {
+        // Ignore postMessage errors as they're expected in development
+        if (event.message.includes('postMessage')) {
+          event.preventDefault();
+        }
+      });
+    </script>
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
