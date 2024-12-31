@@ -13,10 +13,11 @@ interface PaymentModalProps {
   onClose: () => void;
 }
 
-interface PayPalCredentials {
+type PayPalCredentials = {
   client_id: string;
   secret_key: string;
-}
+  [key: string]: Json;
+};
 
 const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
   const navigate = useNavigate();
