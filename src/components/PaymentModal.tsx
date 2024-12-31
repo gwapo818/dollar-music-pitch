@@ -10,28 +10,32 @@ interface PaymentModalProps {
   onClose: () => void;
 }
 
+interface PayPalCredentials {
+  client_id: string;
+  secret_key: string;
+}
+
 const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
   const navigate = useNavigate();
-  const [clientId, setClientId] = useState<string>("");
+  const [credentials, setCredentials] = useState<PayPalCredentials | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchClientId = async () => {
+    const fetchCredentials = async () => {
       if (!isOpen) return;
       
       setIsLoading(true);
       setError(null);
       
       try {
-        console.log("Fetching PayPal client ID...");
-        const { data, error: rpcError } = await supabase.rpc('get_paypal_client_id');
+        console.log("Fetching PayPal credentials...");
+        const { data, error: rpcError } = await supabase.rpc('get_paypal_credentials');
         
         if (rpcError) {
-          console.error('Error fetching PayPal client ID:', rpcError);
-          // Check if the error is due to missing configuration
+          console.error('Error fetching PayPal credentials:', rpcError);
           if (rpcError.message && rpcError.message.includes('not configured')) {
-            setError("PayPal is not properly configured. Please ensure PAYPAL_CLIENT_ID is set in Supabase secrets.");
+            setError("PayPal is not properly configured. Please ensure both PAYPAL_CLIENT_ID and PAYPAL_SECRET_KEY are set in Supabase secrets.");
             toast.error("PayPal configuration is missing. Please contact support.");
           } else {
             setError(`Failed to load payment system: ${rpcError.message}`);
@@ -41,14 +45,14 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
         }
 
         if (!data) {
-          console.error('No PayPal client ID returned');
-          setError("PayPal configuration not found. Please ensure PAYPAL_CLIENT_ID is set in Supabase secrets.");
+          console.error('No PayPal credentials returned');
+          setError("PayPal configuration not found. Please ensure both PAYPAL_CLIENT_ID and PAYPAL_SECRET_KEY are set in Supabase secrets.");
           toast.error("Payment system configuration is missing");
           return;
         }
 
-        console.log("PayPal client ID retrieved successfully");
-        setClientId(data);
+        console.log("PayPal credentials retrieved successfully");
+        setCredentials(data);
       } catch (error) {
         console.error('Unexpected error:', error);
         setError("Failed to initialize payment system. Please try again later.");
@@ -58,7 +62,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
       }
     };
 
-    fetchClientId();
+    fetchCredentials();
   }, [isOpen]);
 
   const handlePaymentSuccess = () => {
@@ -93,7 +97,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
     );
   }
 
-  if (!clientId || isLoading) {
+  if (!credentials || isLoading) {
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent className="bg-app-card text-white">
@@ -130,7 +134,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
           </p>
           <PayPalScriptProvider
             options={{
-              clientId: clientId,
+              clientId: credentials.client_id,
               currency: "USD",
               intent: "capture",
             }}
