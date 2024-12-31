@@ -14,22 +14,29 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
   const navigate = useNavigate();
   const [clientId, setClientId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchClientId = async () => {
       setIsLoading(true);
+      setError(null);
       try {
         const { data, error } = await supabase.rpc('get_paypal_client_id');
         if (error) {
           console.error('Error fetching PayPal client ID:', error);
+          setError("Failed to load payment system");
           toast.error("Failed to load payment system. Please try again later.");
           return;
         }
         if (data) {
           setClientId(data);
+        } else {
+          setError("PayPal configuration not found");
+          toast.error("Payment system configuration is missing");
         }
       } catch (error) {
         console.error('Error:', error);
+        setError("Failed to initialize payment system");
         toast.error("Failed to initialize payment system");
       } finally {
         setIsLoading(false);
@@ -48,15 +55,41 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
     navigate("/pitch");
   };
 
+  if (error) {
+    return (
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="bg-app-card text-white">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-center">
+              Payment System Error
+            </DialogTitle>
+          </DialogHeader>
+          <div className="p-4 text-center">
+            <p className="text-red-400">{error}</p>
+            <button
+              onClick={onClose}
+              className="mt-4 px-4 py-2 bg-app-accent rounded-lg hover:bg-app-accent/90"
+            >
+              Close
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   if (!clientId || isLoading) {
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent className="bg-app-card text-white">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-center">
-              Loading Payment...
+              Loading Payment System...
             </DialogTitle>
           </DialogHeader>
+          <div className="p-4 flex justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-app-accent"></div>
+          </div>
         </DialogContent>
       </Dialog>
     );
