@@ -75,7 +75,7 @@ const Index = () => {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
           <div className="space-y-8">
             <PitchForm onSubmit={handleFormUpdate} />
           </div>
