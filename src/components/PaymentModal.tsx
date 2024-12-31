@@ -51,8 +51,26 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
           return;
         }
 
-        console.log("PayPal credentials retrieved successfully");
-        setCredentials(data as PayPalCredentials);
+        // Type guard to ensure data has the correct shape
+        if (
+          typeof data === 'object' && 
+          data !== null && 
+          'client_id' in data && 
+          'secret_key' in data &&
+          typeof data.client_id === 'string' &&
+          typeof data.secret_key === 'string'
+        ) {
+          console.log("PayPal credentials retrieved successfully");
+          setCredentials({
+            client_id: data.client_id,
+            secret_key: data.secret_key
+          });
+        } else {
+          console.error('Invalid PayPal credentials format');
+          setError("Invalid PayPal credentials format received from server");
+          toast.error("Invalid server configuration");
+          return;
+        }
       } catch (error) {
         console.error('Unexpected error:', error);
         setError("Failed to initialize payment system. Please try again later.");
