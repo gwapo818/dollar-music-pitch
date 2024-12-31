@@ -59,7 +59,8 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
         }
 
         console.log("PayPal credentials retrieved successfully");
-        const typedData = data as PayPalCredentialsResponse;
+        // First cast to unknown, then to our expected type for type safety
+        const typedData = (data as unknown) as PayPalCredentialsResponse;
         setCredentials({
           client_id: typedData.client_id,
           secret_key: typedData.secret_key
