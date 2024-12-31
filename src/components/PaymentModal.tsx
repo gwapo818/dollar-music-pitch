@@ -52,7 +52,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
         }
 
         console.log("PayPal credentials retrieved successfully");
-        setCredentials(data);
+        setCredentials(data as PayPalCredentials);
       } catch (error) {
         console.error('Unexpected error:', error);
         setError("Failed to initialize payment system. Please try again later.");
