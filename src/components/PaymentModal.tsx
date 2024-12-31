@@ -13,16 +13,27 @@ interface PaymentModalProps {
 const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
   const navigate = useNavigate();
   const [clientId, setClientId] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchClientId = async () => {
-      const { data, error } = await supabase.rpc('get_paypal_client_id');
-      if (error) {
-        console.error('Error fetching PayPal client ID:', error);
-        toast.error("Failed to load payment system. Please try again later.");
-        return;
+      setIsLoading(true);
+      try {
+        const { data, error } = await supabase.rpc('get_paypal_client_id');
+        if (error) {
+          console.error('Error fetching PayPal client ID:', error);
+          toast.error("Failed to load payment system. Please try again later.");
+          return;
+        }
+        if (data) {
+          setClientId(data);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        toast.error("Failed to initialize payment system");
+      } finally {
+        setIsLoading(false);
       }
-      setClientId(data || "");
     };
 
     if (isOpen) {
@@ -37,8 +48,18 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
     navigate("/pitch");
   };
 
-  if (!clientId) {
-    return null;
+  if (!clientId || isLoading) {
+    return (
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="bg-app-card text-white">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-center">
+              Loading Payment...
+            </DialogTitle>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    );
   }
 
   return (
@@ -57,35 +78,44 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
             options={{
               clientId: clientId,
               currency: "USD",
+              intent: "capture",
             }}
           >
             <PayPalButtons
               style={{ layout: "vertical" }}
               createOrder={(data, actions) => {
                 return actions.order.create({
-                  intent: "CAPTURE",
                   purchase_units: [
                     {
                       amount: {
                         currency_code: "USD",
                         value: "1.00",
                       },
+                      description: "Music Pitch Creator Access",
                     },
                   ],
                 });
               }}
               onApprove={async (data, actions) => {
                 if (actions.order) {
-                  const order = await actions.order.capture();
-                  console.log("Payment completed:", order);
-                  if (order.status === "COMPLETED") {
-                    handlePaymentSuccess();
+                  try {
+                    const order = await actions.order.capture();
+                    console.log("Payment completed:", order);
+                    if (order.status === "COMPLETED") {
+                      handlePaymentSuccess();
+                    }
+                  } catch (error) {
+                    console.error("Payment capture error:", error);
+                    toast.error("Payment failed. Please try again.");
                   }
                 }
               }}
               onError={(err) => {
                 console.error("PayPal error:", err);
                 toast.error("Payment failed. Please try again.");
+              }}
+              onCancel={() => {
+                toast.error("Payment cancelled");
               }}
             />
           </PayPalScriptProvider>
