@@ -3,6 +3,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { polishPitch } from "@/utils/openai";
 import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { RefreshCw } from "lucide-react";
 
 type PitchPreviewProps = {
   data: {
@@ -18,6 +20,8 @@ type PitchPreviewProps = {
   shouldEnhance: boolean;
 };
 
+const SPOTIFY_CHAR_LIMIT = 300;
+
 const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
   const [polishedPitch, setPolishedPitch] = useState<string>("");
   const [isPolishing, setIsPolishing] = useState(false);
@@ -28,8 +32,16 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
   // Build the initial pitch paragraph
   let pitchContent = "";
   
+  if (songTitle) {
+    pitchContent += `"${songTitle}"`;
+    if (artists) {
+      pitchContent += ` by ${artists}`;
+    }
+    pitchContent += " is ";
+  }
+
   if (genre) {
-    pitchContent += `A ${genre} track that stands out in the current music landscape. `;
+    pitchContent += `a ${genre} track that stands out in the current music landscape. `;
   }
 
   if (theme) {
@@ -52,13 +64,22 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
     pitchContent += `Perfect for ${targetPlaylist} playlists.`;
   }
 
+  // Trim the pitch to respect Spotify's character limit
+  if (pitchContent.length > SPOTIFY_CHAR_LIMIT) {
+    pitchContent = pitchContent.substring(0, SPOTIFY_CHAR_LIMIT - 3) + "...";
+  }
+
   const enhancePitch = useCallback(async () => {
-    if (!pitchContent || isPolishing || hasEnhanced) return;
+    if (!pitchContent || isPolishing) return;
     
     setIsPolishing(true);
     try {
       const enhanced = await polishPitch(pitchContent);
-      setPolishedPitch(enhanced);
+      // Ensure the enhanced pitch also respects the character limit
+      const trimmedEnhanced = enhanced.length > SPOTIFY_CHAR_LIMIT 
+        ? enhanced.substring(0, SPOTIFY_CHAR_LIMIT - 3) + "..."
+        : enhanced;
+      setPolishedPitch(trimmedEnhanced);
       setHasEnhanced(true);
     } catch (error: any) {
       console.error('Error enhancing pitch:', error);
@@ -81,7 +102,13 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
     } finally {
       setIsPolishing(false);
     }
-  }, [pitchContent, isPolishing, hasEnhanced, toast]);
+  }, [pitchContent, isPolishing, toast]);
+
+  const handleRegenerate = () => {
+    setHasEnhanced(false);
+    setPolishedPitch("");
+    enhancePitch();
+  };
 
   // Reset enhancement state when pitch content changes
   React.useEffect(() => {
@@ -100,8 +127,6 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
   // Only render if there's at least a title
   if (!songTitle) return null;
 
-  const titleLine = artists ? `${songTitle} – ${artists}` : songTitle;
-
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -110,7 +135,23 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
     >
       <Card className="glass-card overflow-hidden">
         <CardContent className="p-6 space-y-4 text-left">
-          <h2 className="text-xl font-bold">{titleLine}</h2>
+          <div className="flex justify-between items-center">
+            <div className="text-white/60 text-sm">
+              {SPOTIFY_CHAR_LIMIT - (polishedPitch || pitchContent).length} characters remaining
+            </div>
+            {hasEnhanced && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRegenerate}
+                disabled={isPolishing}
+                className="gap-2"
+              >
+                <RefreshCw className={`h-4 w-4 ${isPolishing ? 'animate-spin' : ''}`} />
+                Regenerate
+              </Button>
+            )}
+          </div>
           
           {(polishedPitch || pitchContent) && (
             <p className="text-white/90 whitespace-pre-wrap leading-relaxed">
