@@ -43,7 +43,7 @@ export const polishPitch = async (pitchContent: string): Promise<string> => {
     
     console.log('Making OpenAI API request...');
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4o-mini", // Updated to use the correct model name
       messages: [
         {
           role: "system",
