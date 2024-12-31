@@ -17,9 +17,9 @@ type PitchFormData = {
   targetPlaylist: string;
 };
 
-const REQUIRED_FIELDS_COUNT = 5; // Minimum fields required to start countdown
-const COUNTDOWN_DELAY = 30; // Seconds to wait before starting countdown
-const COUNTDOWN_DURATION = 3; // Seconds for the countdown animation
+const REQUIRED_FIELDS_COUNT = 5;
+const COUNTDOWN_DELAY = 30;
+const COUNTDOWN_DURATION = 3;
 
 const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData, enhance?: boolean) => void }) => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -46,7 +46,6 @@ const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData, enhance?: boo
       if (value && !isSubmitting) {
         onSubmit(value as PitchFormData, false);
         
-        // Check if enough fields are filled to start countdown
         const filledFieldsCount = Object.values(value).filter(Boolean).length;
         setShouldStartCountdown(filledFieldsCount >= REQUIRED_FIELDS_COUNT);
       }
@@ -56,21 +55,21 @@ const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData, enhance?: boo
 
   // Handle countdown timer
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-    let countdownTimer: NodeJS.Timer;
+    let delayTimer: ReturnType<typeof setTimeout>;
+    let countdownInterval: ReturnType<typeof setInterval>;
     
     if (shouldStartCountdown && !countdownStarted) {
-      timer = setTimeout(() => {
+      delayTimer = setTimeout(() => {
         setCountdownStarted(true);
         const startTime = Date.now();
-        countdownTimer = setInterval(() => {
+        countdownInterval = setInterval(() => {
           const elapsed = (Date.now() - startTime) / 1000;
           const progress = Math.min((elapsed / COUNTDOWN_DURATION) * 100, 100);
           
           setCountdownProgress(progress);
           
           if (progress >= 100) {
-            clearInterval(countdownTimer);
+            clearInterval(countdownInterval);
             handleSubmit(form.getValues());
           }
         }, 50);
@@ -78,8 +77,10 @@ const PitchForm = ({ onSubmit }: { onSubmit: (data: PitchFormData, enhance?: boo
     }
 
     return () => {
-      clearTimeout(timer);
-      clearInterval(countdownTimer);
+      clearTimeout(delayTimer);
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+      }
       setCountdownProgress(0);
     };
   }, [shouldStartCountdown, countdownStarted]);
