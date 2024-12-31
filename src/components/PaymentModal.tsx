@@ -25,9 +25,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
       
       try {
         console.log("Fetching PayPal client ID...");
-        const { data, error: rpcError } = await supabase.rpc('get_paypal_client_id', {}, {
-          count: 'exact'
-        });
+        const { data, error: rpcError } = await supabase.rpc('get_paypal_client_id');
         
         if (rpcError) {
           console.error('Error fetching PayPal client ID:', rpcError);
