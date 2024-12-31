@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import { polishPitch } from "@/utils/openai";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, CircuitBoard } from "lucide-react";
+import { RefreshCw, CircuitBoard, Copy, Download } from "lucide-react";
+import { jsPDF } from "jspdf";
 
 type PitchPreviewProps = {
   data: {
@@ -20,7 +21,7 @@ type PitchPreviewProps = {
   shouldEnhance: boolean;
 };
 
-const SPOTIFY_CHAR_LIMIT = 500;
+const CHAR_LIMIT = 500;
 
 const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
   const [polishedPitch, setPolishedPitch] = useState<string>("");
@@ -101,6 +102,45 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
     enhancePitch(true);
   };
 
+  const handleCopy = async () => {
+    const textToCopy = polishedPitch || pitchContent;
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      toast({
+        title: "Copied!",
+        description: "Pitch copied to clipboard",
+      });
+    } catch (err) {
+      toast({
+        title: "Copy failed",
+        description: "Please try again",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleExport = () => {
+    const doc = new jsPDF();
+    const textToExport = polishedPitch || pitchContent;
+    
+    // Add title
+    doc.setFontSize(16);
+    doc.text("Music Pitch", 20, 20);
+    
+    // Add content with word wrap
+    doc.setFontSize(12);
+    const splitText = doc.splitTextToSize(textToExport, 170);
+    doc.text(splitText, 20, 40);
+    
+    // Save the PDF
+    doc.save("music-pitch.pdf");
+    
+    toast({
+      title: "Exported!",
+      description: "Your pitch has been exported to PDF",
+    });
+  };
+
   // Reset enhancement state when pitch content changes
   React.useEffect(() => {
     if (!shouldEnhance) {
@@ -133,7 +173,7 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
           
           {(polishedPitch || pitchContent) && (
             <motion.p 
-              className="text-white/90 whitespace-pre-wrap leading-relaxed"
+              className="text-white/90 whitespace-pre-wrap leading-relaxed mb-12"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
@@ -142,13 +182,33 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
             </motion.p>
           )}
           
-          {hasEnhanced && (
-            <motion.div 
-              className="absolute bottom-4 right-4"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 }}
+          <motion.div 
+            className="absolute bottom-4 right-4 flex gap-2"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleCopy}
+              className="gap-2 bg-[#9b87f5]/10 border-[#9b87f5]/30 hover:bg-[#9b87f5]/20 hover:border-[#9b87f5]/40 text-[#D6BCFA]"
             >
+              <Copy className="h-4 w-4" />
+              Copy
+            </Button>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleExport}
+              className="gap-2 bg-[#9b87f5]/10 border-[#9b87f5]/30 hover:bg-[#9b87f5]/20 hover:border-[#9b87f5]/40 text-[#D6BCFA]"
+            >
+              <Download className="h-4 w-4" />
+              Export
+            </Button>
+
+            {hasEnhanced && (
               <Button
                 variant="outline"
                 size="sm"
@@ -159,8 +219,8 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
                 <RefreshCw className={`h-4 w-4 ${isPolishing ? 'animate-spin' : ''}`} />
                 Regenerate
               </Button>
-            </motion.div>
-          )}
+            )}
+          </motion.div>
         </CardContent>
       </Card>
     </motion.div>
