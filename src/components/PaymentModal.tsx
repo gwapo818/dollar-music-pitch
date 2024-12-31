@@ -29,8 +29,13 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
         
         if (rpcError) {
           console.error('Error fetching PayPal client ID:', rpcError);
-          setError("Failed to load payment system");
-          toast.error("Failed to load payment system. Please try again later.");
+          if (rpcError.message.includes('not configured')) {
+            setError("PayPal is not properly configured. Please contact support.");
+            toast.error("PayPal configuration is missing. Please try again later.");
+          } else {
+            setError("Failed to load payment system");
+            toast.error("Failed to load payment system. Please try again later.");
+          }
           return;
         }
 
@@ -71,11 +76,10 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
               Payment System Error
             </DialogTitle>
             <DialogDescription className="text-white/80 text-center">
-              We encountered an issue with the payment system. Please try again later.
+              {error}
             </DialogDescription>
           </DialogHeader>
           <div className="p-4 text-center">
-            <p className="text-red-400">{error}</p>
             <button
               onClick={onClose}
               className="mt-4 px-4 py-2 bg-app-accent rounded-lg hover:bg-app-accent/90"
