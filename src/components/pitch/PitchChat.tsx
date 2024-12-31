@@ -42,8 +42,8 @@ const PitchChat = ({ currentPitch, onUpdatePitch }: PitchChatProps) => {
   };
 
   return (
-    <div className="mt-6 space-y-2">
-      <p className="text-sm text-white/70">
+    <div className="mt-12 pt-6 border-t border-white/10">
+      <p className="text-sm text-white/70 mb-3">
         Suggest changes or ask for improvements to your pitch
       </p>
       <form onSubmit={handleSubmit} className="flex gap-2">

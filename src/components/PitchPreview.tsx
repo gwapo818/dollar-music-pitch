@@ -175,20 +175,22 @@ const PitchPreview = ({ data, shouldEnhance }: PitchPreviewProps) => {
             <PitchContent content={polishedPitch || pitchContent} />
           )}
           
-          <motion.div 
-            className="absolute bottom-4 right-4"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            <PitchActionButtons
-              onRegenerate={handleRegenerate}
-              onCopy={handleCopy}
-              onExport={handleExport}
-              isPolishing={isPolishing}
-              hasEnhanced={hasEnhanced}
-            />
-          </motion.div>
+          <div className="relative pb-12">
+            <motion.div 
+              className="absolute bottom-0 right-0"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              <PitchActionButtons
+                onRegenerate={handleRegenerate}
+                onCopy={handleCopy}
+                onExport={handleExport}
+                isPolishing={isPolishing}
+                hasEnhanced={hasEnhanced}
+              />
+            </motion.div>
+          </div>
 
           {hasEnhanced && (
             <PitchChat
