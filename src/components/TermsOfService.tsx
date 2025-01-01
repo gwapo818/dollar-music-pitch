@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 const TermsOfService = () => {
   return (
-    <div className="mt-16 pb-8">
+    <div>
       <a 
         href="https://app.termly.io/document/terms-of-service-free/907be23b-b479-4753-ae42-4de350559e1c"
         target="_blank"

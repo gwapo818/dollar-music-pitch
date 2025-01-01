@@ -87,7 +87,7 @@ const Index = () => {
           </div>
 
           {/* Legal Section */}
-          <div className="border-t border-white/10 mt-16">
+          <div className="border-t border-white/10 mt-16 flex justify-center space-x-4">
             <PrivacyPolicy />
             <TermsOfService />
           </div>

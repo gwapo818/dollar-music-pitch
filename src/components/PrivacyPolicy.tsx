@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 const PrivacyPolicy = () => {
   return (
-    <div className="mt-16 pb-8">
+    <div>
       <a 
         href="https://app.termly.io/document/privacy-policy/4c0cd4d3-d25c-4501-aa37-23f1d46d6ec8"
         target="_blank"
