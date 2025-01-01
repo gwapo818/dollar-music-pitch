@@ -55,7 +55,7 @@ const LandingPage = () => {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#9b87f5] via-[#b8a4f8] to-[#D6BCFA] mb-6">
-              Craft Perfect Music Pitches
+              Craft Perfect Music Pitches Online
             </h1>
             <p className="text-xl md:text-2xl text-white/80 mb-8 max-w-3xl mx-auto">
               Create compelling music pitches that get noticed, all for just{" "}
