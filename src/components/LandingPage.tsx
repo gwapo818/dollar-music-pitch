@@ -208,9 +208,11 @@ const LandingPage = () => {
 
       {/* Legal Section */}
       <div className="border-t border-white/10 mt-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <PrivacyPolicy />
-          <TermsOfService />
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="flex justify-center items-center space-x-8">
+            <PrivacyPolicy />
+            <TermsOfService />
+          </div>
         </div>
       </div>
     </div>
