@@ -84,8 +84,8 @@ const LandingPage = () => {
             <div className="glass-card p-6 rounded-xl hover-scale group">
               <div className="mb-6 overflow-hidden rounded-lg">
                 <img
-                  src="https://images.unsplash.com/photo-1483058712412-4245e9b90334"
-                  alt="Professional Setup"
+                  src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
+                  alt="Professional Format"
                   className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
@@ -118,7 +118,7 @@ const LandingPage = () => {
             <div className="glass-card p-6 rounded-xl hover-scale group">
               <div className="mb-6 overflow-hidden rounded-lg">
                 <img
-                  src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
+                  src="https://images.unsplash.com/photo-1611339555312-e607c8352fd7"
                   alt="Target Playlists"
                   className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
