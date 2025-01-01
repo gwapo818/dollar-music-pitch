@@ -29,6 +29,14 @@ const App = () => {
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route
+                path="/index"
+                element={
+                  <ProtectedRoute>
+                    <Index />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/pitch"
                 element={
                   <ProtectedRoute>
