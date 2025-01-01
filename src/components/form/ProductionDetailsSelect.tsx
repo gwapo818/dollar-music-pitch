@@ -1,5 +1,5 @@
 import React from "react";
-import { Radio } from "lucide-react";
+import { Radio, Plus, Search } from "lucide-react";
 import {
   FormControl,
   FormField,
@@ -66,6 +66,12 @@ export const ProductionDetailsSelect = ({ form }: { form: any }) => {
     setSearchValue("");
   };
 
+  const handleAddCustomElement = () => {
+    if (!searchValue.trim()) return;
+    handleElementSelect(searchValue.trim());
+    setOpen(false);
+  };
+
   const filteredElements = React.useMemo(() => {
     if (!searchValue) return PRODUCTION_ELEMENTS;
     return PRODUCTION_ELEMENTS.filter(element => 
@@ -93,7 +99,8 @@ export const ProductionDetailsSelect = ({ form }: { form: any }) => {
                   className="w-full justify-between"
                 >
                   <span className="flex items-center gap-2">
-                    Select production elements...
+                    <Search className="w-4 h-4" />
+                    Search or add production elements...
                   </span>
                 </Button>
               </PopoverTrigger>
@@ -105,6 +112,19 @@ export const ProductionDetailsSelect = ({ form }: { form: any }) => {
                     onValueChange={setSearchValue}
                   />
                   <CommandList>
+                    <CommandEmpty className="p-2">
+                      {searchValue.trim() && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className="w-full justify-start gap-2"
+                          onClick={handleAddCustomElement}
+                        >
+                          <Plus className="w-4 h-4" />
+                          Add "{searchValue}"
+                        </Button>
+                      )}
+                    </CommandEmpty>
                     <CommandGroup>
                       {filteredElements.map((element) => (
                         <CommandItem
