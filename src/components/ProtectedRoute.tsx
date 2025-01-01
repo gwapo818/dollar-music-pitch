@@ -3,20 +3,16 @@ import { Navigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  // Check if in development mode or payment is completed
+  // Allow access in development mode
   const isDevelopment = import.meta.env.DEV;
-  const isPaymentCompleted = localStorage.getItem('paymentCompleted') === 'true';
+  const hasAccess = isDevelopment || localStorage.getItem("has_access") === "true";
 
-  if (isDevelopment || isPaymentCompleted) {
-    return <>{children}</>;
+  if (!hasAccess) {
+    toast.error("Please complete payment to access this feature");
+    return <Navigate to="/" replace />;
   }
 
-  // Redirect to landing page with a toast message
-  toast.error("Please complete payment to access this feature", {
-    description: "You need to purchase access to use the pitch generator."
-  });
-
-  return <Navigate to="/" replace />;
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;
