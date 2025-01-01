@@ -26,7 +26,7 @@ serve(async (req) => {
         },
       ],
       mode: 'payment',
-      success_url: `${req.headers.get('origin')}/pitch`,
+      success_url: `${req.headers.get('origin')}/?payment_status=success`,
       cancel_url: `${req.headers.get('origin')}/`,
     });
 

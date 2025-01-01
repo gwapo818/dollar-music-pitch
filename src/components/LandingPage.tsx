@@ -1,11 +1,27 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Music2, Sparkles, Target } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import PaymentModal from "./PaymentModal";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const LandingPage = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const paymentStatus = searchParams.get('payment_status');
+    if (paymentStatus === 'success') {
+      localStorage.setItem('payment_completed', 'true');
+      toast.success('Payment successful! Redirecting to pitch creator...');
+      // Remove the payment_status from URL and redirect to /pitch
+      setTimeout(() => {
+        navigate('/pitch');
+      }, 1500);
+    }
+  }, [searchParams, navigate]);
 
   const handleStartCreating = () => {
     setShowPaymentModal(true);
