@@ -37,8 +37,18 @@ const LandingPage = () => {
       />
       
       {/* Hero Section */}
-      <div className="px-4 py-16 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
+      <div className="relative px-4 py-16 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Background Image with Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+            alt="Background"
+            className="w-full h-full object-cover opacity-10"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-app-dark/90 to-app-dark/70" />
+        </div>
+
+        <div className="max-w-7xl mx-auto text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -62,7 +72,7 @@ const LandingPage = () => {
         </div>
       </div>
 
-      {/* Features Section */}
+      {/* Features Section with Images */}
       <div className="px-4 py-16 sm:px-6 lg:px-8 bg-black/20">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -71,7 +81,14 @@ const LandingPage = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
           >
-            <div className="glass-card p-6 rounded-xl">
+            <div className="glass-card p-6 rounded-xl hover-scale group">
+              <div className="mb-6 overflow-hidden rounded-lg">
+                <img
+                  src="https://images.unsplash.com/photo-1483058712412-4245e9b90334"
+                  alt="Professional Setup"
+                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
               <div className="flex items-center justify-center w-12 h-12 rounded-full bg-app-accent/20 mb-4 mx-auto">
                 <Music2 className="text-app-accent" />
               </div>
@@ -81,7 +98,14 @@ const LandingPage = () => {
               </p>
             </div>
 
-            <div className="glass-card p-6 rounded-xl">
+            <div className="glass-card p-6 rounded-xl hover-scale group">
+              <div className="mb-6 overflow-hidden rounded-lg">
+                <img
+                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085"
+                  alt="AI Enhancement"
+                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
               <div className="flex items-center justify-center w-12 h-12 rounded-full bg-app-accent/20 mb-4 mx-auto">
                 <Sparkles className="text-app-accent" />
               </div>
@@ -91,7 +115,14 @@ const LandingPage = () => {
               </p>
             </div>
 
-            <div className="glass-card p-6 rounded-xl">
+            <div className="glass-card p-6 rounded-xl hover-scale group">
+              <div className="mb-6 overflow-hidden rounded-lg">
+                <img
+                  src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
+                  alt="Target Playlists"
+                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
               <div className="flex items-center justify-center w-12 h-12 rounded-full bg-app-accent/20 mb-4 mx-auto">
                 <Target className="text-app-accent" />
               </div>
@@ -105,8 +136,17 @@ const LandingPage = () => {
       </div>
 
       {/* How It Works Section */}
-      <div className="px-4 py-16 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <div className="relative px-4 py-16 sm:px-6 lg:px-8 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+            alt="Background"
+            className="w-full h-full object-cover opacity-5"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-app-dark/90 to-app-dark/70" />
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
