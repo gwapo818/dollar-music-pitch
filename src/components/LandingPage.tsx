@@ -5,6 +5,8 @@ import { Button } from "./ui/button";
 import PaymentModal from "./PaymentModal";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
+import PrivacyPolicy from "./PrivacyPolicy";
+import TermsOfService from "./TermsOfService";
 
 const LandingPage = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -161,6 +163,14 @@ const LandingPage = () => {
               Get Started <ArrowRight className="ml-2" />
             </Button>
           </motion.div>
+        </div>
+      </div>
+
+      {/* Legal Section */}
+      <div className="border-t border-white/10 mt-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <PrivacyPolicy />
+          <TermsOfService />
         </div>
       </div>
     </div>

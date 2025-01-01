@@ -2,6 +2,8 @@ import { useState } from "react";
 import PitchForm from "@/components/PitchForm";
 import PitchPreview from "@/components/PitchPreview";
 import { motion } from "framer-motion";
+import PrivacyPolicy from "@/components/PrivacyPolicy";
+import TermsOfService from "@/components/TermsOfService";
 
 type PitchData = {
   songTitle: string;
@@ -82,6 +84,12 @@ const Index = () => {
             <div className="space-y-8">
               <PitchPreview data={pitchData} shouldEnhance={shouldEnhance} />
             </div>
+          </div>
+
+          {/* Legal Section */}
+          <div className="border-t border-white/10 mt-16">
+            <PrivacyPolicy />
+            <TermsOfService />
           </div>
         </motion.div>
       </div>
