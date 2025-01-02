@@ -8,9 +8,9 @@ import { HeroSection } from "./landing/HeroSection";
 import { FeaturesSection } from "./landing/FeaturesSection";
 import { WhySection } from "./landing/WhySection";
 import { HowItWorksSection } from "./landing/HowItWorksSection";
+import { CTASection } from "./landing/CTASection";
 import { TestimonialsSection } from "./landing/TestimonialsSection";
 import { FAQSection } from "./landing/FAQSection";
-import { CTASection } from "./landing/CTASection";
 
 const LandingPage = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -43,6 +43,7 @@ const LandingPage = () => {
       <FeaturesSection />
       <WhySection />
       <HowItWorksSection />
+      <CTASection onStartCreating={handleStartCreating} />
       <TestimonialsSection />
       <FAQSection />
       <CTASection onStartCreating={handleStartCreating} />

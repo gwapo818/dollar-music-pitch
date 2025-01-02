@@ -1,32 +1,32 @@
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
-interface CTASectionProps {
+type CTASectionProps = {
   onStartCreating: () => void;
-}
+};
 
 export const CTASection = ({ onStartCreating }: CTASectionProps) => {
   return (
     <div className="px-4 py-16 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto text-center">
+      <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          transition={{ duration: 0.6 }}
+          className="text-center"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Create Your Perfect Pitch?
+            Ready to Get Your Music Noticed?
           </h2>
           <p className="text-xl text-white/80 mb-8">
-            Start crafting your professional music pitch now for just $1
+            Join hundreds of artists who've already improved their pitch game
           </p>
           <Button
-            size="lg"
-            className="bg-app-accent hover:bg-app-accent/90 text-white px-8 py-6 text-lg rounded-full"
             onClick={onStartCreating}
+            size="lg"
+            className="bg-app-accent hover:bg-app-accent/90 text-white px-8 py-6 text-lg hover-scale"
           >
-            Get Started <ArrowRight className="ml-2" />
+            Start Pitching for $1
           </Button>
         </motion.div>
       </div>
