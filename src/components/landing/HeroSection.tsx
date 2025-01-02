@@ -11,8 +11,8 @@ export const HeroSection = ({ onStartCreating }: HeroSectionProps) => {
     <div className="relative px-4 py-16 sm:px-6 lg:px-8 overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img
-          src="/lovable-uploads/23b2e4b3-d203-441c-ac99-8fbf0bb8b684.png"
-          alt="Music Pitch Creator Hero"
+          src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+          alt="Background"
           className="w-full h-full object-cover opacity-10"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-app-dark/90 to-app-dark/70" />
