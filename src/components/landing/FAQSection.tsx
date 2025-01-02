@@ -32,7 +32,7 @@ export const FAQSection = () => {
                 How do you ensure the quality of the pitches?
               </AccordionTrigger>
               <AccordionContent className="text-white/70">
-                Our AI-powered system is trained on successful music pitches and follows industry best practices. Each pitch is crafted to highlight your unique strengths while maintaining a professional tone. You can also edit and customize the pitch to your liking before sending.
+                Our AI-powered system is trained on successful music pitches and follows industry best practices. Each pitch is crafted to highlight your unique strengths while maintaining a professional tone. You can also edit and customize the pitch to your liking.
               </AccordionContent>
             </AccordionItem>
 
@@ -41,7 +41,7 @@ export const FAQSection = () => {
                 What happens after I make the payment?
               </AccordionTrigger>
               <AccordionContent className="text-white/70">
-                After your $1 payment is processed, you'll get immediate access to our pitch creator tool. You can start creating your pitch right away, and you'll be able to edit, download, or copy your pitch as many times as you need.
+                After your $1 payment is processed, you'll get immediate access to our pitch creator tool. You can start creating your pitch right away, and you'll be able to edit, download, or copy your pitch as many times as you need during your session.
               </AccordionContent>
             </AccordionItem>
 
@@ -50,7 +50,7 @@ export const FAQSection = () => {
                 Are there any recurring charges?
               </AccordionTrigger>
               <AccordionContent className="text-white/70">
-                No, this is a one-time payment of $1. There are no hidden fees, no subscriptions, and no recurring charges. You get full access to create your professional pitch for just $1.
+                No, this is a one-time payment of $1 for 1 session. There are no hidden fees, no subscriptions, and no recurring charges. You get full access to create your professional pitch for just $1.
               </AccordionContent>
             </AccordionItem>
           </Accordion>
