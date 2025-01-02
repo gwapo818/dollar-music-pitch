@@ -24,7 +24,7 @@ export const FeaturesSection = () => {
             </div>
             <h3 className="text-xl font-semibold mb-3">Professional Format</h3>
             <p className="text-white/70">
-              Create structured, professional pitches that highlight your music's unique value
+              Create structured, professional pitches that highlight your music's unique value for playlist curators
             </p>
           </div>
 
@@ -41,7 +41,7 @@ export const FeaturesSection = () => {
             </div>
             <h3 className="text-xl font-semibold mb-3">AI Enhancement</h3>
             <p className="text-white/70">
-              Our AI helps polish your pitch to make it more engaging and professional
+              Our Trained AI Agent helps polish your pitch to stand out to playlist curators and get noticed
             </p>
           </div>
 
@@ -58,7 +58,7 @@ export const FeaturesSection = () => {
             </div>
             <h3 className="text-xl font-semibold mb-3">Target Playlists</h3>
             <p className="text-white/70">
-              Tailor your pitch for specific playlists to increase your chances of success
+              Tailor your pitch for specific playlists and boost your chances of landing more playlist placements
             </p>
           </div>
         </motion.div>

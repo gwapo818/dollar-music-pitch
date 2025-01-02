@@ -15,7 +15,7 @@ export const WhySection = () => {
             Why Choose Our Pitch Creator?
           </h2>
           <p className="text-xl text-white/80">
-            Craft professional pitches in minutes, not hours
+            Craft professional playlist pitches in minutes, not hours
           </p>
         </motion.div>
 
