@@ -6,8 +6,10 @@ import PrivacyPolicy from "./PrivacyPolicy";
 import TermsOfService from "./TermsOfService";
 import { HeroSection } from "./landing/HeroSection";
 import { FeaturesSection } from "./landing/FeaturesSection";
+import { WhySection } from "./landing/WhySection";
 import { HowItWorksSection } from "./landing/HowItWorksSection";
 import { TestimonialsSection } from "./landing/TestimonialsSection";
+import { FAQSection } from "./landing/FAQSection";
 import { CTASection } from "./landing/CTASection";
 
 const LandingPage = () => {
@@ -39,8 +41,10 @@ const LandingPage = () => {
       
       <HeroSection onStartCreating={handleStartCreating} />
       <FeaturesSection />
+      <WhySection />
       <HowItWorksSection />
       <TestimonialsSection />
+      <FAQSection />
       <CTASection onStartCreating={handleStartCreating} />
 
       {/* Legal Section */}
