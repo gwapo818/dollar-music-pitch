@@ -19,7 +19,7 @@ export const CTASection = ({ onStartCreating }: CTASectionProps) => {
             Ready to Get Your Music Noticed?
           </h2>
           <p className="text-xl text-white/80 mb-8">
-            Join hundreds of artists who've already improved their pitch game
+            Join thousands of artists who've already improved their pitch game
           </p>
           <Button
             onClick={onStartCreating}
