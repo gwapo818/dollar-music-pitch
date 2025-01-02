@@ -43,10 +43,10 @@ const LandingPage = () => {
       <FeaturesSection />
       <WhySection />
       <HowItWorksSection />
-      <CTASection onStartCreating={handleStartCreating} />
+      <CTASection onStartCreating={handleStartCreating} isMiddleSection={true} />
       <TestimonialsSection />
       <FAQSection />
-      <CTASection onStartCreating={handleStartCreating} />
+      <CTASection onStartCreating={handleStartCreating} isMiddleSection={false} />
 
       {/* Legal Section */}
       <div className="border-t border-white/10 mt-16">
