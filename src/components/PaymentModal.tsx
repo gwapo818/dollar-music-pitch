@@ -18,7 +18,7 @@ const PaymentModal = ({ isOpen, onClose, priceId }: PaymentModalProps) => {
     try {
       // Pass the price ID if provided
       const { data, error } = await supabase.functions.invoke('create-checkout-session', {
-        body: priceId ? { priceId } : undefined
+        body: priceId ? { priceId } : {}
       });
       
       if (error) {

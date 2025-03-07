@@ -42,13 +42,53 @@ serve(async (req) => {
     
     // Get the origin for success and cancel URLs
     const origin = req.headers.get('origin') || 'https://ryqrqcjbxujecrcvisvu.lovable.dev';
+    
+    // The product ID specified by the user
+    const productId = 'prod_RtuZjpfN4qrpGu';
+    
+    // Use the provided priceId if it exists, otherwise get the first price for the product
+    let priceId = requestData.priceId;
+    
+    if (!priceId) {
+      console.log(`No price ID provided, looking up price for product ${productId}`);
+      try {
+        // Get the prices for this product
+        const prices = await stripe.prices.list({
+          product: productId,
+          active: true,
+          limit: 1
+        });
+        
+        if (prices.data.length > 0) {
+          priceId = prices.data[0].id;
+          console.log(`Found price ID for product: ${priceId}`);
+        } else {
+          console.error(`No active prices found for product ${productId}`);
+          return new Response(
+            JSON.stringify({ error: 'No pricing available for this product' }),
+            { 
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+              status: 400,
+            }
+          );
+        }
+      } catch (e) {
+        console.error(`Error fetching prices for product ${productId}:`, e);
+        return new Response(
+          JSON.stringify({ error: 'Error fetching product pricing' }),
+          { 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            status: 500,
+          }
+        );
+      }
+    }
 
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
-          // Use the provided price ID or fall back to your default product
-          price: requestData.priceId || 'price_1PhXAYE8JKVpfnECVvbh6tQS',
+          price: priceId,
           quantity: 1,
         },
       ],
