@@ -60,6 +60,19 @@ const Index = () => {
             >
               Craft compelling music pitches that get noticed
             </motion.p>
+            
+            {/* Warning Message */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="mt-4 mb-6 max-w-2xl mx-auto p-3 bg-amber-500/20 border border-amber-500/30 rounded-md"
+            >
+              <p className="text-amber-200 font-medium">
+                Important: This is your active paid session. Please do not close or reload this page as you may lose access to the pitch creation tool.
+              </p>
+            </motion.div>
+            
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
