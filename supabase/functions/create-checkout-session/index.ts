@@ -38,7 +38,7 @@ serve(async (req) => {
       requestData = await req.json();
     }
 
-    console.log('Creating payment session...');
+    console.log('Creating payment session with data:', requestData);
     
     // Get the origin for success and cancel URLs
     const origin = req.headers.get('origin') || 'https://ryqrqcjbxujecrcvisvu.lovable.dev';
@@ -47,7 +47,7 @@ serve(async (req) => {
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
-          // Replace this with your actual price ID from Stripe dashboard
+          // Use the provided price ID or fall back to your default product
           price: requestData.priceId || 'price_1PhXAYE8JKVpfnECVvbh6tQS',
           quantity: 1,
         },
@@ -55,7 +55,7 @@ serve(async (req) => {
       mode: 'payment',
       success_url: `${origin}/?payment_status=success`,
       cancel_url: `${origin}/`,
-      // You can add additional options as needed
+      // You can uncomment and customize these options as needed
       // payment_method_types: ['card'],
       // customer_email: requestData.email,
     });
