@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";
 
@@ -29,7 +30,7 @@ export const CTASection = ({ onStartCreating, isMiddleSection = false }: CTASect
                 size="lg"
                 className="bg-app-accent hover:bg-app-accent/90 text-white px-8 py-6 text-lg hover-scale"
               >
-                Start Pitching for $1
+                Start Pitching for $7
               </Button>
             </>
           ) : (
@@ -45,7 +46,7 @@ export const CTASection = ({ onStartCreating, isMiddleSection = false }: CTASect
                 size="lg"
                 className="bg-white hover:bg-white/90 text-app-dark px-8 py-6 text-lg font-semibold hover-scale shadow-xl"
               >
-                Pitch Now for Just $1!
+                Pitch Now for Just $7!
               </Button>
             </div>
           )}

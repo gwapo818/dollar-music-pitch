@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "../ui/button";
@@ -32,7 +33,7 @@ export const HeroSection = ({ onStartCreating }: HeroSectionProps) => {
           </p>
           <p className="text-xl md:text-2xl text-white/80 mb-8">
             Create compelling playlist pitches that get noticed, all for just{" "}
-            <span className="text-app-accent font-semibold">$1</span>
+            <span className="text-app-accent font-semibold">$7</span>
           </p>
           <Button
             size="lg"

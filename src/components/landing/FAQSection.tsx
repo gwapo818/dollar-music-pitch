@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import {
   Accordion,
@@ -41,7 +42,7 @@ export const FAQSection = () => {
                 What happens after I make the payment?
               </AccordionTrigger>
               <AccordionContent className="text-white/70">
-                After your $1 payment is processed, you'll get immediate access to our pitch creator tool. You can start creating your pitch right away, and you'll be able to edit, download, or copy your pitch as many times as you need during your session.
+                After your $7 payment is processed, you'll get immediate access to our pitch creator tool. You can start creating your pitch right away, and you'll be able to edit, download, or copy your pitch as many times as you need during your session.
               </AccordionContent>
             </AccordionItem>
 
@@ -50,7 +51,7 @@ export const FAQSection = () => {
                 Are there any recurring charges?
               </AccordionTrigger>
               <AccordionContent className="text-white/70">
-                No, this is a one-time payment of $1 for 1 session. There are no hidden fees, no subscriptions, and no recurring charges. You get full access to create your professional pitch for just $1.
+                No, this is a one-time payment of $7 for 1 session. There are no hidden fees, no subscriptions, and no recurring charges. You get full access to create your professional pitch for just $7.
               </AccordionContent>
             </AccordionItem>
           </Accordion>

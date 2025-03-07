@@ -1,3 +1,4 @@
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -46,7 +47,7 @@ const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
         </DialogHeader>
         <div className="p-4">
           <p className="text-center mb-6 text-white/80">
-            Pay $1 to access the pitch creation tool
+            Pay $7 to access the pitch creation tool
           </p>
           <Button 
             onClick={handlePayment}
