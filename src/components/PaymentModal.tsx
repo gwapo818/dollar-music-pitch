@@ -8,14 +8,18 @@ import { supabase } from "@/integrations/supabase/client";
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
+  priceId?: string; // Optional price ID to override the default
 }
 
-const PaymentModal = ({ isOpen, onClose }: PaymentModalProps) => {
+const PaymentModal = ({ isOpen, onClose, priceId }: PaymentModalProps) => {
   const navigate = useNavigate();
 
   const handlePayment = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('create-checkout-session');
+      // Pass the price ID if provided
+      const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+        body: priceId ? { priceId } : undefined
+      });
       
       if (error) {
         console.error('Error creating checkout session:', error);
