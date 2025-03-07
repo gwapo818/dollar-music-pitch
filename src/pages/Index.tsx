@@ -50,7 +50,7 @@ const Index = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-5xl md:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#9b87f5] via-[#b8a4f8] to-[#D6BCFA] drop-shadow-lg"
             >
-              Dollar Music Pitch
+              dmpitch.com
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, y: -10 }}
