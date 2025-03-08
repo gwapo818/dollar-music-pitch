@@ -23,12 +23,8 @@ export const HeroSection = ({
       }} transition={{
         duration: 0.6
       }}>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#9b87f5] via-[#b8a4f8] to-[#D6BCFA] mb-6">
-            Get Your Music on More Playlists with Professional Pitches
-          </h1>
-          <p className="text-xl md:text-2xl text-white/80 mb-4">
-            Triple Your Acceptance Rate with Compelling Pitches that Curators Actually Read
-          </p>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#9b87f5] via-[#b8a4f8] to-[#D6BCFA] mb-6">Get Your Music on More Playlists with Professional AI Pitches</h1>
+          <p className="text-xl md:text-2xl text-white/80 mb-4">Triple Your Acceptance Rate with Compelling AI Pitches that Curators Actually Read</p>
           <p className="text-xl md:text-2xl text-white/80 mb-8">
             Professional pitch creation for just{" "}
             <span className="text-app-accent font-semibold">$7</span> <span className="text-white/60 line-through text-lg">not $50+ per pitch</span>

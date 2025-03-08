@@ -12,9 +12,7 @@ export const WhySection = () => {
       }} transition={{
         duration: 0.6
       }} className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Why Artists Trust Our Pitch Creator
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Artists Trust Our AI Pitch Creator</h2>
           <p className="text-xl text-white/80">
             Create in 10 minutes what normally takes 2+ hours
           </p>
