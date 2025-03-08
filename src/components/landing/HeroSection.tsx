@@ -39,7 +39,7 @@ export const HeroSection = ({
             <div className="flex space-x-2 bg-white/5 px-4 py-2 rounded-full">
               <span className="flex items-center text-green-400">
                 <Check size={16} className="mr-1" /> 
-                <span className="text-sm">3 artists created pitches in the last hour</span>
+                <span className="text-sm">32 artists created pitches in the last hour</span>
               </span>
             </div>
           </div>
