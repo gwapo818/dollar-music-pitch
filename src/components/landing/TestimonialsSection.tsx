@@ -15,7 +15,7 @@ const testimonials = [
     role: "Independent Artist"
   },
   {
-    quote: "Best $7 I've spent on music promotion. The AI pitch writer increased my playlist acceptance rate from 2% to nearly 30%. Simple, fast, and incredibly effective.",
+    quote: "Finally got my tracks on a few good playlists after using the AI pitch tool. My previous attempts were always ignored, but the AI-written pitch actually got responses. Definitely worth the investment for independent artists.",
     author: "Mike R",
     role: "Hip Hop Producer"
   }
