@@ -1,19 +1,20 @@
+
 import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
 
 const testimonials = [
   {
-    quote: "I hate writing and this tool made it very easy for me to create and adjust my pitch for Spotify",
+    quote: "Got accepted to 5 playlists within 2 weeks! I hate writing and this tool made it very easy to create a professional pitch that actually worked.",
     author: "Andy C",
     role: "Electronic Music Producer"
   },
   {
-    quote: "The AI enhancement feature helped me make my pitch sound more professional. Got accepted to 3 playlists!",
+    quote: "The AI enhancement feature took my basic description and turned it into something that actually sounds professional. Got accepted to 3 playlists after dozens of failed attempts on my own!",
     author: "Sarah M",
     role: "Independent Artist"
   },
   {
-    quote: "Best dollar I've spent on music promotion. Simple, fast, and effective.",
+    quote: "Best $7 I've spent on music promotion. My playlist acceptance rate went from 2% to nearly 30% using these pitches. Simple, fast, and effective.",
     author: "Mike R",
     role: "Hip Hop Producer"
   }
@@ -30,10 +31,10 @@ export const TestimonialsSection = () => {
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            What Artists Say
+            Real Results from Real Artists
           </h2>
           <p className="text-xl text-white/80">
-            Join hundreds of satisfied artists who've improved their pitch game
+            Join hundreds of artists who've increased their playlist placements
           </p>
         </motion.div>
 

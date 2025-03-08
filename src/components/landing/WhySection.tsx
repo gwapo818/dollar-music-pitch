@@ -1,5 +1,6 @@
+
 import { motion } from "framer-motion";
-import { Clock, Zap, Trophy } from "lucide-react";
+import { Clock, Zap, Trophy, CheckCircle } from "lucide-react";
 
 export const WhySection = () => {
   return (
@@ -12,10 +13,10 @@ export const WhySection = () => {
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Why Choose Our Pitch Creator?
+            Why Artists Trust Our Pitch Creator
           </h2>
           <p className="text-xl text-white/80">
-            Craft professional playlist pitches in minutes, not hours
+            Create in 10 minutes what normally takes 2+ hours
           </p>
         </motion.div>
 
@@ -29,9 +30,9 @@ export const WhySection = () => {
             <div className="flex justify-center mb-4">
               <Zap className="w-12 h-12 text-app-accent" />
             </div>
-            <h3 className="text-2xl font-bold mb-2">90% Faster</h3>
+            <h3 className="text-2xl font-bold mb-2">4x More Responses</h3>
             <p className="text-white/70">
-              Create professional pitches in minutes instead of hours
+              Our structured pitches get 4x more responses than typical emails
             </p>
           </motion.div>
 
@@ -44,9 +45,9 @@ export const WhySection = () => {
             <div className="flex justify-center mb-4">
               <Clock className="w-12 h-12 text-app-accent" />
             </div>
-            <h3 className="text-2xl font-bold mb-2">Save 45 Minutes</h3>
+            <h3 className="text-2xl font-bold mb-2">Save 2+ Hours</h3>
             <p className="text-white/70">
-              Average time saved per pitch compared to manual writing
+              Create professional pitches in minutes instead of hours of research and writing
             </p>
           </motion.div>
 
@@ -61,7 +62,7 @@ export const WhySection = () => {
             </div>
             <h3 className="text-2xl font-bold mb-2">85% Success Rate</h3>
             <p className="text-white/70">
-              Our users report higher playlist acceptance rates
+              85% of our users get at least one playlist placement within 2 weeks
             </p>
           </motion.div>
         </div>

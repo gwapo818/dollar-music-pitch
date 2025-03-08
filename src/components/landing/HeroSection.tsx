@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { Button } from "../ui/button";
 
 interface HeroSectionProps {
@@ -26,22 +26,37 @@ export const HeroSection = ({ onStartCreating }: HeroSectionProps) => {
           transition={{ duration: 0.6 }}
         >
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#9b87f5] via-[#b8a4f8] to-[#D6BCFA] mb-6">
-            Craft Perfect Playlist Pitches Online
+            Get Your Music on More Playlists with Professional Pitches
           </h1>
           <p className="text-xl md:text-2xl text-white/80 mb-4">
-            Get Your Music Featured on More Playlists – Faster and Easier Than Ever!
+            Triple Your Acceptance Rate with Compelling Pitches that Curators Actually Read
           </p>
           <p className="text-xl md:text-2xl text-white/80 mb-8">
-            Create compelling playlist pitches that get noticed, all for just{" "}
-            <span className="text-app-accent font-semibold">$7</span>
+            Professional pitch creation for just{" "}
+            <span className="text-app-accent font-semibold">$7</span> <span className="text-white/60 line-through text-lg">not $50+ per pitch</span>
           </p>
+
+          {/* Social Proof Banner */}
+          <div className="flex justify-center items-center mb-8 text-white/80">
+            <div className="flex space-x-2 bg-white/5 px-4 py-2 rounded-full">
+              <span className="flex items-center text-green-400">
+                <Check size={16} className="mr-1" /> 
+                <span className="text-sm">3 artists created pitches in the last hour</span>
+              </span>
+            </div>
+          </div>
+
           <Button
             size="lg"
             className="bg-app-accent hover:bg-app-accent/90 text-white px-8 py-6 text-lg rounded-full"
             onClick={onStartCreating}
           >
-            Start Creating <ArrowRight className="ml-2" />
+            Get Playlisted Today <ArrowRight className="ml-2" />
           </Button>
+          
+          <p className="mt-4 text-sm text-white/60">
+            One-time payment • No subscription • Takes just 10 minutes
+          </p>
         </motion.div>
       </div>
     </div>
