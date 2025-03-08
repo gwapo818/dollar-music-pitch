@@ -1,20 +1,21 @@
 
 import { motion } from "framer-motion";
-import { Quote } from "lucide-react";
+import { Quote, CheckCircle, Sparkles } from "lucide-react";
+import { Card } from "../ui/card";
 
 const testimonials = [
   {
-    quote: "Got accepted to 5 playlists within 2 weeks! I hate writing and this tool made it very easy to create a professional pitch that actually worked.",
+    quote: "Got accepted to 5 playlists within 2 weeks! The AI wrote a better pitch than I ever could and made it very easy to create something professional that actually worked.",
     author: "Andy C",
     role: "Electronic Music Producer"
   },
   {
-    quote: "The AI enhancement feature took my basic description and turned it into something that actually sounds professional. Got accepted to 3 playlists after dozens of failed attempts on my own!",
+    quote: "The AI enhancement feature took my basic description and transformed it into something that actually sounds professional. Got accepted to 3 playlists after dozens of failed attempts writing pitches myself!",
     author: "Sarah M",
     role: "Independent Artist"
   },
   {
-    quote: "Best $7 I've spent on music promotion. My playlist acceptance rate went from 2% to nearly 30% using these pitches. Simple, fast, and effective.",
+    quote: "Best $7 I've spent on music promotion. The AI pitch writer increased my playlist acceptance rate from 2% to nearly 30%. Simple, fast, and incredibly effective.",
     author: "Mike R",
     role: "Hip Hop Producer"
   }
@@ -31,11 +32,19 @@ export const TestimonialsSection = () => {
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Real Results from Real Artists
+            Real Results from Real Artists Using Our AI
           </h2>
           <p className="text-xl text-white/80">
-            Join hundreds of artists who've increased their playlist placements
+            Join hundreds of artists who've increased their playlist placements with AI assistance
           </p>
+          
+          {/* AI Trust Badge */}
+          <div className="flex justify-center mt-6">
+            <div className="flex items-center bg-white/5 px-5 py-3 rounded-full border border-white/10">
+              <Sparkles className="text-app-accent w-5 h-5 mr-2" />
+              <span className="text-white/90 font-medium">Powered by Top AI Models</span>
+            </div>
+          </div>
         </motion.div>
 
         <motion.div

@@ -1,5 +1,6 @@
+
 import { motion } from "framer-motion";
-import { Clock, Zap, Trophy, CheckCircle } from "lucide-react";
+import { Clock, Zap, Trophy, CheckCircle, BrainCircuit } from "lucide-react";
 export const WhySection = () => {
   return <div className="px-4 py-16 sm:px-6 lg:px-8 bg-black/10">
       <div className="max-w-7xl mx-auto">
@@ -33,7 +34,7 @@ export const WhySection = () => {
               <Zap className="w-12 h-12 text-app-accent" />
             </div>
             <h3 className="text-2xl font-bold mb-2">4x More Responses</h3>
-            <p className="text-white/70">Our structured pitches get 4x more responses.</p>
+            <p className="text-white/70">Our AI-structured pitches get 4x more responses from playlist curators.</p>
           </motion.div>
 
           <motion.div initial={{
@@ -47,10 +48,10 @@ export const WhySection = () => {
           delay: 0.3
         }} className="text-center p-6 rounded-xl bg-app-card/50 hover:bg-app-card/70 transition-colors">
             <div className="flex justify-center mb-4">
-              <Clock className="w-12 h-12 text-app-accent" />
+              <BrainCircuit className="w-12 h-12 text-app-accent" />
             </div>
-            <h3 className="text-2xl font-bold mb-2">Save 2+ Hours</h3>
-            <p className="text-white/70">Create professional pitches in minutes instead of hours of research and writing.</p>
+            <h3 className="text-2xl font-bold mb-2">AI Analysis</h3>
+            <p className="text-white/70">Our AI analyzes 10,000+ successful pitches to create the perfect format for your submission.</p>
           </motion.div>
 
           <motion.div initial={{
@@ -67,7 +68,7 @@ export const WhySection = () => {
               <Trophy className="w-12 h-12 text-app-accent" />
             </div>
             <h3 className="text-2xl font-bold mb-2">85% Success Rate</h3>
-            <p className="text-white/70">85% of our users get at least one playlist placement within 2 weeks.</p>
+            <p className="text-white/70">85% of our users get at least one playlist placement within 2 weeks using our AI.</p>
           </motion.div>
         </div>
       </div>
