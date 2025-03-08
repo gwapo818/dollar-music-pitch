@@ -65,9 +65,10 @@ export const CTASection = ({ onStartCreating, isMiddleSection = false }: CTASect
               <Button
                 onClick={onStartCreating}
                 size="lg"
-                className="bg-white hover:bg-white/90 text-app-dark px-8 py-6 text-lg font-semibold hover-scale shadow-xl"
+                className="bg-white hover:bg-white/90 text-app-dark px-4 py-6 text-lg font-semibold hover-scale shadow-xl max-w-full"
               >
-                <Bot className="mr-2" /> Get AI-Written Pitch for Just $7!
+                <Bot className="mr-2 flex-shrink-0" /> 
+                <span className="whitespace-normal">Get AI-Written Pitch for Just $7!</span>
               </Button>
               <p className="mt-6 text-white/80">
                 <span className="font-semibold">Only 27 spots</span> left at this price
